@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-
-// Define Mongoose schema for PostDetail
 const postDetailSchema = new mongoose.Schema({
     desc: String,
     utilities: String,
@@ -10,14 +8,7 @@ const postDetailSchema = new mongoose.Schema({
     school: Number,
     bus: Number,
     restaurant: Number,
-    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', unique: true }, // Reference to Post model
+    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', unique: true },
   });
-  
-
-
 const PostDetail = mongoose.model('PostDetail', postDetailSchema);
-// Define models based on schemas
 export default PostDetail;
-
-
-// Export models

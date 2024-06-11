@@ -1,9 +1,6 @@
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import Post from "../models/post.js";
 import SavedPost  from "../models/savedpost.js";
-dotenv.config();
-const JWT_SECRET_KEY = "1234";
+import cookie from "../cookie.js";
 export const getPosts = async (req, res) => {
   const query = req.query;
 
@@ -30,7 +27,7 @@ export const getPosts = async (req, res) => {
 
 export const getPost = async (req, res) => {
   const id = req.params.id;
-
+  const uid = JSON.parse(cookie.get('userData'))._id;
   try {
     const post = await Post.findById(id).populate({
       path: "postDetail",
@@ -40,21 +37,11 @@ export const getPost = async (req, res) => {
       select: "username avatar",
       model: "User",
     });
-
-    const token = req.cookies?.token;
-
-    if (token) {
-      jwt.verify(token, JWT_SECRET_KEY, async (err, payload) => {
-        if (!err) {
-          const saved = await SavedPost.findOne({
-            postId: id,
-            userId: payload.id,
-          });
-          res.status(200).json({ ...post._doc, isSaved: saved ? true : false });
-        }
-      });
-    }
-    res.status(200).json({ ...post._doc, isSaved: false });
+    const saved = await SavedPost.findOne({
+      postId: id,
+      userId: uid,
+    });
+    res.status(200).json({ ...post._doc, isSaved: saved ? true : false });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to get post" });
@@ -63,7 +50,8 @@ export const getPost = async (req, res) => {
 
 export const addPost = async (req, res) => {
   const body = req.body;
-  const tokenUserId = req.userId;
+  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
+
 
   try {
     const newPost = await Post.create({
@@ -91,7 +79,8 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   const id = req.params.id;
-  const tokenUserId = req.userId;
+  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
+
 
   try {
     const post = await Post.findById(id);

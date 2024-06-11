@@ -4,6 +4,8 @@ import Post from "../models/post.js";
 import  User  from "../models/user.js";
 import  SavedPost  from "../models/savedpost.js";
 import Chat from "../models/chat.js"
+import cookie from "../cookie.js";
+
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -27,7 +29,7 @@ export const getUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const id = req.params.id;
-  const tokenUserId = req.userId;
+  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
   const { password, avatar, ...inputs } = req.body;
 
   if (id !== tokenUserId) {
@@ -59,7 +61,7 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   const id = req.params.id;
-  const tokenUserId = req.userId;
+  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
 
   if (id !== tokenUserId) {
     return res.status(403).json({ message: "Not Authorized!" });
@@ -76,7 +78,7 @@ export const deleteUser = async (req, res) => {
 
 export const savePost = async (req, res) => {
   const postId = req.body.postId;
-  const tokenUserId = req.userId;
+  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
 
   try {
     const savedPost = await SavedPost.findOne({ userId: tokenUserId, postId });
@@ -95,7 +97,7 @@ export const savePost = async (req, res) => {
 };
 
 export const profilePosts = async (req, res) => {
-  const tokenUserId = req.userId;
+  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
   try {
     const userPosts = await Post.find({ userId: tokenUserId });
     const saved = await SavedPost.find({ userId: tokenUserId }).populate('post');
@@ -109,7 +111,7 @@ export const profilePosts = async (req, res) => {
 };
 
 export const getNotificationNumber = async (req, res) => {
-  const tokenUserId = req.userId;
+  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
   try {
     const number = await Chat.countDocuments({
       userIDs: tokenUserId,
