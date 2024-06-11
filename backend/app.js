@@ -8,14 +8,11 @@ import userRoute from "./routes/user.route.js";
 import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
 const app = express();
-import { configDotenv } from "dotenv";
 import { connectDB } from "./db/db.js"; // Adjust the path as needed
 
 connectDB();
 configDotenv.apply();
-const CLIENT_URL= "http://localhost:4900";
-app.use(cors({ origin: CLIENT_URL, credentials: true }));
-console.log(CLIENT_URL);
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
