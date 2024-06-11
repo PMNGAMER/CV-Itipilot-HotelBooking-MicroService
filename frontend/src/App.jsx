@@ -17,10 +17,6 @@ function App() {
       element: <Layout />,
       children: [
         {
-          path: "/",
-          element: <HomePage />,
-        },
-        {
           path: "/list",
           element: <ListPage />,
           loader: listPageLoader,
@@ -30,30 +26,12 @@ function App() {
           element: <SinglePage />,
           loader: singlePageLoader,
         },
-
-        {
-          path: "/login",
-          element: <Login />,
-        },
-        {
-          path: "/register",
-          element: <Register />,
-        },
       ],
     },
     {
       path: "/",
       element: <RequireAuth />,
       children: [
-        {
-          path: "/profile",
-          element: <ProfilePage />,
-          loader: profilePageLoader
-        },
-        {
-          path: "/profile/update",
-          element: <ProfileUpdatePage />,
-        },
         {
           path: "/add",
           element: <NewPostPage />,
