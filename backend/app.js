@@ -13,8 +13,9 @@ import { connectDB } from "./db/db.js"; // Adjust the path as needed
 
 connectDB();
 configDotenv.apply();
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
-console.log(process.env.CLIENT_URL);
+const CLIENT_URL= "http://localhost:4900";
+app.use(cors({ origin: CLIENT_URL, credentials: true }));
+console.log(CLIENT_URL);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -25,6 +26,6 @@ app.use("/api/test", testRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
 
-app.listen(8800, () => {
+app.listen(4800, () => {
   console.log("Server is running!");
 });

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import Post from "../models/post.js";
 import SavedPost  from "../models/savedpost.js";
 dotenv.config();
-
+const JWT_SECRET_KEY = "1234";
 export const getPosts = async (req, res) => {
   const query = req.query;
 
@@ -44,7 +44,7 @@ export const getPost = async (req, res) => {
     const token = req.cookies?.token;
 
     if (token) {
-      jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
+      jwt.verify(token, JWT_SECRET_KEY, async (err, payload) => {
         if (!err) {
           const saved = await SavedPost.findOne({
             postId: id,

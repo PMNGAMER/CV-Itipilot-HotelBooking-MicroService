@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
+const DATABASE_URL = "mongodb://localhost:27017/mongo-golang";
 export const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DATABASE_URL);
+    await mongoose.connect(DATABASE_URL);
     console.log("MongoDB connected successfully!");
   } catch (error) {
     console.error("MongoDB connection failed:", error);
-    process.exit(1); // Exit with failure
   }
 };

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import User from "../models/user.js"
 dotenv.config();
 
+const JWT_SECRET_KEY= "1234";
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -52,7 +53,7 @@ export const login = async (req, res) => {
         id: user._id, // Assuming Mongoose generates _id for documents
         isAdmin: false,
       },
-      process.env.JWT_SECRET_KEY,
+      JWT_SECRET_KEY,
       { expiresIn: age }
     );
 
