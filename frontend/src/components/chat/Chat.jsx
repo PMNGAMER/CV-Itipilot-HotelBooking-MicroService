@@ -17,7 +17,7 @@ function Chat({ chats }) {
   }, [chat]);
   const handleOpenChat = async (id, receiver) => {
     try {
-      const res = await axios("/chats/" + id);
+      const res = await axios.get("http://localhost:4800/chats/"+id);
       if (!res.data.seenBy.includes(currentUser._id)) {
         decrease();
       }
@@ -33,7 +33,7 @@ function Chat({ chats }) {
 
     if (!text) return;
     try {
-      const res = await axios.post("/messages/" + chat._id, { text });
+      const res = await axios.post("http://localhost:4800/messages/" + chat._id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       e.target.reset();
       socket.emit("sendMessage", {
@@ -47,7 +47,7 @@ function Chat({ chats }) {
   useEffect(() => {
     const read = async () => {
       try {
-        await axios.put("/chats/read/" + chat._id);
+        await axios.put("http://localhost:4800/chats/read/" + chat._id);
       } catch (err) {
         console.log(err);
       }

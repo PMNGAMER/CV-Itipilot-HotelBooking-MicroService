@@ -14,7 +14,7 @@ function NewPostPage() {
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
     try {
-      const res = await axios.post("/posts", {
+      const res = await axios.post("http://localhost:4800/posts", {
         postData: {
           title: inputs.title,
           price: parseInt(inputs.price),

@@ -7,7 +7,7 @@ function SinglePage() {
   const { id } = useParams();
   useEffect(() => {
     const fetchPostData = async () => {
-      const res = await apiRequest("/posts/" + id);
+      const res = await apiRequest("http://localhost:4800/posts/" + id);
       setPostData(res.data);
     };
     fetchPostData();
@@ -16,7 +16,7 @@ function SinglePage() {
   const handleSave = async () => {
     setSaved((prev) => !prev);
     try {
-      await axios.post("/users/save", { postId: post._id });
+      await axios.post("http://localhost:4800/users/save", { postId: post._id });
     } catch (err) {
       console.log(err);
       setSaved((prev) => !prev);

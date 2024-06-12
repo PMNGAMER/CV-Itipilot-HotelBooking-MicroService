@@ -13,22 +13,22 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/users/${currentUser._id}`);
+        const response = await axios.get(`http://localhost:4800/users/${currentUser._id}`);
         const userData = response.data;
         const postRequests = userData.posts.map(postId =>
-          axios.get(`/api/posts/${postId}`)
+          axios.get(`http://localhost:4800/posts/${postId}`)
         );
         const postResponses = await Promise.all(postRequests);
         const postsData = postResponses.map(postResponse => postResponse.data);
         setUserPosts(postsData);
         const postSavedRequests = userData.savedPosts.map(postId =>
-          axios.get(`/api/posts/${postId}`)
+          axios.get(`http://localhost:4800/posts/${postId}`)
         );
         const postSavedResponses = await Promise.all(postSavedRequests);
         const postsSavedData = postSavedResponses.map(postResponse => postResponse.data);
         setUserSavedPosts(postsSavedData);
         const chatRequests = userData.chats.map(chatId =>
-          axios.get(`/api/chats/${chatId}`)
+          axios.get(`http://localhost:4800/chats/${chatId}`)
         );
         const chatResponses = await Promise.all(chatRequests);
         const chatsData = chatResponses.map(chatResponse => chatResponse.data);

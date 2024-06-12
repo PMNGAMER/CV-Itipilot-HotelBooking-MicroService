@@ -3,7 +3,7 @@ import axios from "axios";
 export const useNotificationStore = create((set) => ({
   number: 0,
   fetch: async () => {
-    const res = await axios("/users/notification");
+    const res = await axios("http://localhost:4800/users/notification");
     set({ number: res.data });
   },
   decrease: () => {
