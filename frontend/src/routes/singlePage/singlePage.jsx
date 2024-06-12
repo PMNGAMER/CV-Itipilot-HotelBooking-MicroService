@@ -1,36 +1,31 @@
 import "./singlePage.scss";
-import Slider from "../../components/slider/Slider";
-import Map from "../../components/map/Map";
-import { useNavigate, useLoaderData } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import apiRequest from "../../lib/apiRequest";
-
+import {useState } from "react";
+import axios from "axios";
 function SinglePage() {
-  const post = useLoaderData();
+  const [post, setPostData] = useState(null);
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchPostData = async () => {
+      const res = await apiRequest("/posts/" + id);
+      setPostData(res.data);
+    };
+    fetchPostData();
+  }, [id]);
   const [saved, setSaved] = useState(post.isSaved);
-  const { currentUser } = useContext(AuthContext);
-  const navigate = useNavigate();
-
   const handleSave = async () => {
-    if (!currentUser) {
-      navigate("/login");
-    }
     setSaved((prev) => !prev);
     try {
-      await apiRequest.post("/users/save", { postId: post.id });
+      await axios.post("/users/save", { postId: post._id });
     } catch (err) {
       console.log(err);
       setSaved((prev) => !prev);
     }
   };
-
   return (
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          <Slider images={post.images} />
           <div className="info">
             <div className="top">
               <div className="post">
@@ -42,7 +37,6 @@ function SinglePage() {
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={post.user.avatar} alt="" />
                 <span>{post.user.username}</span>
               </div>
             </div>
@@ -133,15 +127,7 @@ function SinglePage() {
               </div>
             </div>
           </div>
-          <p className="title">Location</p>
-          <div className="mapContainer">
-            <Map items={[post]} />
-          </div>
           <div className="buttons">
-            <button>
-              <img src="/chat.png" alt="" />
-              Send a Message
-            </button>
             <button
               onClick={handleSave}
               style={{

@@ -1,36 +1,51 @@
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
 import "./profilePage.scss";
-import apiRequest from "../../lib/apiRequest";
-import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
-import { Suspense, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-
+import {Link} from "react-router-dom";
+import {useState } from "react";
+import cookie from "../../../../backend/cookie";
+import axios from "axios";
 function ProfilePage() {
-  const data = useLoaderData();
-
-  const { updateUser, currentUser } = useContext(AuthContext);
-
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await apiRequest.post("/auth/logout");
-      updateUser(null);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const [userPosts, setUserPosts] = useState([]);
+  const [userSavedPosts, setUserSavedPosts] = useState([]);
+  const [userChats, setUserChats] = useState([]);
+  const currentUser = JSON.parse(cookie.get('userData'));
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`/api/users/${currentUser._id}`);
+        const userData = response.data;
+        const postRequests = userData.posts.map(postId =>
+          axios.get(`/api/posts/${postId}`)
+        );
+        const postResponses = await Promise.all(postRequests);
+        const postsData = postResponses.map(postResponse => postResponse.data);
+        setUserPosts(postsData);
+        const postSavedRequests = userData.savedPosts.map(postId =>
+          axios.get(`/api/posts/${postId}`)
+        );
+        const postSavedResponses = await Promise.all(postSavedRequests);
+        const postsSavedData = postSavedResponses.map(postResponse => postResponse.data);
+        setUserSavedPosts(postsSavedData);
+        const chatRequests = userData.chats.map(chatId =>
+          axios.get(`/api/chats/${chatId}`)
+        );
+        const chatResponses = await Promise.all(chatRequests);
+        const chatsData = chatResponses.map(chatResponse => chatResponse.data);
+        setUserChats(chatsData);
+        
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserData();
+  }, [currentUser]);
   return (
     <div className="profilePage">
       <div className="details">
         <div className="wrapper">
           <div className="title">
             <h1>User Information</h1>
-            <Link to="/profile/update">
-              <button>Update Profile</button>
-            </Link>
           </div>
           <div className="info">
             <span>
@@ -51,37 +66,16 @@ function ProfilePage() {
               <button>Create New Post</button>
             </Link>
           </div>
-          <Suspense fallback={<p>Loading...</p>}>
-            <Await
-              resolve={data.postResponse}
-              errorElement={<p>Error loading posts!</p>}
-            >
-              {(postResponse) => <List posts={postResponse.data.userPosts} />}
-            </Await>
-          </Suspense>
+          <List posts={userPosts} />
           <div className="title">
             <h1>Saved List</h1>
           </div>
-          <Suspense fallback={<p>Loading...</p>}>
-            <Await
-              resolve={data.postResponse}
-              errorElement={<p>Error loading posts!</p>}
-            >
-              {(postResponse) => <List posts={postResponse.data.savedPosts} />}
-            </Await>
-          </Suspense>
+          <List posts={userSavedPosts} />
         </div>
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-          <Suspense fallback={<p>Loading...</p>}>
-            <Await
-              resolve={data.chatResponse}
-              errorElement={<p>Error loading chats!</p>}
-            >
-              {(chatResponse) => <Chat chats={chatResponse.data}/>}
-            </Await>
-          </Suspense>
+          <Chat chats={userChats}/>   
         </div>
       </div>
     </div>

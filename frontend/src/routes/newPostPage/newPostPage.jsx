@@ -2,24 +2,19 @@ import { useState } from "react";
 import "./newPostPage.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import apiRequest from "../../lib/apiRequest";
-import UploadWidget from "../../components/uploadWidget/UploadWidget";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function NewPostPage() {
   const [value, setValue] = useState("");
-  const [images, setImages] = useState([]);
   const [error, setError] = useState("");
-
   const navigate = useNavigate()
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
-
     try {
-      const res = await apiRequest.post("/posts", {
+      const res = await axios.post("/posts", {
         postData: {
           title: inputs.title,
           price: parseInt(inputs.price),
@@ -31,7 +26,6 @@ function NewPostPage() {
           property: inputs.property,
           latitude: inputs.latitude,
           longitude: inputs.longitude,
-          images: images,
         },
         postDetail: {
           desc: value,
@@ -156,20 +150,6 @@ function NewPostPage() {
             {error && <span>error</span>}
           </form>
         </div>
-      </div>
-      <div className="sideContainer">
-        {images.map((image, index) => (
-          <img src={image} key={index} alt="" />
-        ))}
-        <UploadWidget
-          uwConfig={{
-            multiple: true,
-            cloudName: "lamadev",
-            uploadPreset: "estate",
-            folder: "posts",
-          }}
-          setState={setImages}
-        />
       </div>
     </div>
   );

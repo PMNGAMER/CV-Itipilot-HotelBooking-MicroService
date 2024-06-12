@@ -1,28 +1,24 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import "./chat.scss";
-import { AuthContext } from "../../context/AuthContext";
-import apiRequest from "../../lib/apiRequest";
+import axios from "axios";
 import { format } from "timeago.js";
 import { SocketContext } from "../../context/SocketContext";
 import { useNotificationStore } from "../../lib/notificationStore";
+import cookie from "../../../../backend/cookie";
 
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = JSON.parse(cookie.get('userData'));
   const { socket } = useContext(SocketContext);
-
   const messageEndRef = useRef();
-
   const decrease = useNotificationStore((state) => state.decrease);
-
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
-
   const handleOpenChat = async (id, receiver) => {
     try {
-      const res = await apiRequest("/chats/" + id);
-      if (!res.data.seenBy.includes(currentUser.id)) {
+      const res = await axios("/chats/" + id);
+      if (!res.data.seenBy.includes(currentUser._id)) {
         decrease();
       }
       setChat({ ...res.data, receiver });
@@ -30,39 +26,35 @@ function Chat({ chats }) {
       console.log(err);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData(e.target);
     const text = formData.get("text");
 
     if (!text) return;
     try {
-      const res = await apiRequest.post("/messages/" + chat.id, { text });
+      const res = await axios.post("/messages/" + chat._id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       e.target.reset();
       socket.emit("sendMessage", {
-        receiverId: chat.receiver.id,
+        receiverId: chat.receiver._id,
         data: res.data,
       });
     } catch (err) {
       console.log(err);
     }
   };
-
   useEffect(() => {
     const read = async () => {
       try {
-        await apiRequest.put("/chats/read/" + chat.id);
+        await axios.put("/chats/read/" + chat._id);
       } catch (err) {
         console.log(err);
       }
     };
-
     if (chat && socket) {
       socket.on("getMessage", (data) => {
-        if (chat.id === data.chatId) {
+        if (chat._id === data.chatId) {
           setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
           read();
         }
@@ -80,16 +72,15 @@ function Chat({ chats }) {
         {chats?.map((c) => (
           <div
             className="message"
-            key={c.id}
+            key={c._id}
             style={{
               backgroundColor:
-                c.seenBy.includes(currentUser.id) || chat?.id === c.id
+                c.seenBy.includes(currentUser._id) || chat?._id === c._id
                   ? "white"
                   : "#fecd514e",
             }}
-            onClick={() => handleOpenChat(c.id, c.receiver)}
+            onClick={() => handleOpenChat(c._id, c.receiver)}
           >
-            <img src={c.receiver.avatar || "/noavatar.jpg"} alt="" />
             <span>{c.receiver.username}</span>
             <p>{c.lastMessage}</p>
           </div>
@@ -99,7 +90,6 @@ function Chat({ chats }) {
         <div className="chatBox">
           <div className="top">
             <div className="user">
-              <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
               {chat.receiver.username}
             </div>
             <span className="close" onClick={() => setChat(null)}>
@@ -112,11 +102,11 @@ function Chat({ chats }) {
                 className="chatMessage"
                 style={{
                   alignSelf:
-                    message.userId === currentUser.id
+                    message.userId === currentUser._id
                       ? "flex-end"
                       : "flex-start",
                   textAlign:
-                    message.userId === currentUser.id ? "right" : "left",
+                    message.userId === currentUser._id ? "right" : "left",
                 }}
                 key={message.id}
               >
