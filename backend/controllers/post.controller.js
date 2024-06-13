@@ -27,7 +27,7 @@ export const getPosts = async (req, res) => {
 
 export const getPost = async (req, res) => {
   const id = req.params.id;
-  const uid = JSON.parse(cookie.get('userData'))._id;
+  const uid = cookie.get('userServerData')._id;
   try {
     const post = await Post.findById(id).populate({
       path: "postDetail",
@@ -50,7 +50,7 @@ export const getPost = async (req, res) => {
 
 export const addPost = async (req, res) => {
   const body = req.body;
-  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
+  const tokenUserId = cookie.get('userServerData')._id;
 
 
   try {
@@ -79,7 +79,7 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   const id = req.params.id;
-  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
+  const tokenUserId = cookie.get('userServerData')._id;
 
 
   try {

@@ -4,11 +4,11 @@ import axios from "axios";
 import { format } from "timeago.js";
 import { SocketContext } from "../../context/SocketContext";
 import { useNotificationStore } from "../../lib/notificationStore";
-import cookie from "../../../../backend/cookie";
 
+import { getCookie } from "../../cookie";
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
-  const { currentUser } = JSON.parse(cookie.get('userData'));
+  const currentUser = getCookie('userData');
   const { socket } = useContext(SocketContext);
   const messageEndRef = useRef();
   const decrease = useNotificationStore((state) => state.decrease);

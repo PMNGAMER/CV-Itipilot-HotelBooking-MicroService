@@ -1,11 +1,17 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ListPage from "./routes/listPage/listPage";
-import Layout from "./routes/layout/layout";
+import {Layout} from "./routes/layout/layout";
 import SinglePage from "./routes/singlePage/singlePage";
 import NewPostPage from "./routes/newPostPage/newPostPage";
 import ProfilePage from "./routes/profilePage/profilePage";
+import { useEffect } from "react";
+import { setCookie } from "./cookie";
+import cookie from "../../backend/cookie";
 function App() {
+  useEffect(()=>{
+    setCookie('userData', cookie.get('userServerData'));
+  }, cookie.get('userServerData'));
   return (
     <BrowserRouter>
       <Routes>
@@ -19,5 +25,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
 export default App;

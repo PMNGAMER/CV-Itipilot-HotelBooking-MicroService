@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import cookie from "../../../backend/cookie";
+import { getCookie } from "../cookie";
 export const SocketContext = createContext();
 
 export const SocketContextProvider = ({ children }) => {
-  const currentUser  = JSON.parse(cookie.get('userData'));
+  const currentUser  = getCookie('userData');
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {

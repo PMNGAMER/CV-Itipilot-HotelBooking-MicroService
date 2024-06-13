@@ -1,12 +1,10 @@
-import { useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
 import { useNotificationStore } from "../../lib/notificationStore";
-import cookie from "../../../../backend/cookie";
-
+import { getCookie } from "../../cookie";
 function Navbar() {
 
-  const { currentUser } = JSON.parse(cookie.get('userData'));
+  const currentUser  = getCookie('userData');
 
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);

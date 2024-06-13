@@ -3,13 +3,13 @@ import List from "../../components/list/List";
 import "./profilePage.scss";
 import {Link} from "react-router-dom";
 import {useState } from "react";
-import cookie from "../../../../backend/cookie";
+import { getCookie } from "../../cookie";
 import axios from "axios";
 function ProfilePage() {
   const [userPosts, setUserPosts] = useState([]);
   const [userSavedPosts, setUserSavedPosts] = useState([]);
   const [userChats, setUserChats] = useState([]);
-  const currentUser = JSON.parse(cookie.get('userData'));
+  const currentUser = getCookie('userData');
   useEffect(() => {
     const fetchUserData = async () => {
       try {

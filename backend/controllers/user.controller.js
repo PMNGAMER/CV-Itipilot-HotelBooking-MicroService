@@ -1,7 +1,6 @@
 import  User  from "../models/user.js";
 import Chat from "../models/chat.js"
 import cookie from "../cookie.js";
-
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -25,7 +24,7 @@ export const getUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   const id = req.params.id;
-  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
+  const tokenUserId = cookie.get('userServerData')._id;
 
   if (id !== tokenUserId) {
     return res.status(403).json({ message: "Not Authorized!" });
@@ -40,7 +39,7 @@ export const deleteUser = async (req, res) => {
   }
 };
 export const getNotificationNumber = async (req, res) => {
-  const tokenUserId = JSON.parse(cookie.get('userData'))._id;
+  const tokenUserId = cookie.get('userServerData')._id;
   try {
     const number = await Chat.countDocuments({
       userIDs: tokenUserId,
