@@ -1,8 +1,8 @@
-import cookie from "../cookie";
+import { cookie, change } from "../cookie.js";
 export const getUserData = async (req, res) => {
     try {
-      cookie.set('userServerData', req.body.data);
-      console.log(cookie.get('userServerData'));
+      change(req.body.data);
+      // console.log(cookie);
       res.status(200).json("ok" );
     } catch (err) {
       console.log(err);

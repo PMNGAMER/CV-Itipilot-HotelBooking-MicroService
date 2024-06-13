@@ -7,20 +7,25 @@ import NewPostPage from "./routes/newPostPage/newPostPage";
 import ProfilePage from "./routes/profilePage/profilePage";
 import { useEffect } from "react";
 import { setCookie } from "./cookie";
-import cookie from "../../backend/cookie";
+import { cookie } from "../../backend/cookie.js";
 function App() {
   useEffect(()=>{
-    setCookie('userData', cookie.get('userServerData'));
-  }, cookie.get('userServerData'));
+    setCookie('userData', cookie);
+    if (cookie != null) {
+      console.log(cookie);
+    }
+  }, [cookie]);
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="list" element={<ListPage />} />
-          <Route path=":id" element={<SinglePage />} />
-          <Route path="add" element={<NewPostPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-        </Route>
+      {cookie !== null ? (
+          <Route path="/" element={<Layout />}>
+            <Route path="list" element={<ListPage />} />
+            <Route path=":id" element={<SinglePage />} />
+            <Route path="add" element={<NewPostPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+          </Route>
+        ):null}
       </Routes>
     </BrowserRouter>
   );

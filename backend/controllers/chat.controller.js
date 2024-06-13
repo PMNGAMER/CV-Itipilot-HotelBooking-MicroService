@@ -1,7 +1,7 @@
 import Chat  from "../models/chat.js"; // Assuming Chat and User models are imported correctly
-import cookie from "../cookie.js";
+import {cookie} from "../cookie.js";
 export const getChats = async (req, res) => {
-  const tokenUserId = cookie.get('userServerData')._id;
+  const tokenUserId = cookie._id;
   try {
     const chats = await Chat.find({
       userIDs: { $in: [tokenUserId] },
@@ -18,7 +18,7 @@ export const getChats = async (req, res) => {
 };
 
 export const getChat = async (req, res) => {
-  const tokenUserId = cookie.get('userServerData')._id;
+  const tokenUserId = cookie._id;
 
 
   try {
@@ -42,7 +42,7 @@ export const getChat = async (req, res) => {
 };
 
 export const addChat = async (req, res) => {
-  const tokenUserId = cookie.get('userServerData')._id;
+  const tokenUserId = cookie._id;
 
 
   try {
@@ -58,7 +58,7 @@ export const addChat = async (req, res) => {
 };
 
 export const readChat = async (req, res) => {
-  const tokenUserId = cookie.get('userServerData')._id;
+  const tokenUserId = cookie._id;
 
 
   try {

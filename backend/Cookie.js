@@ -1,3 +1,5 @@
-import { Cookies } from "react-cookie";
-const cookie = new Cookies();
-export default cookie;
+let cookie = null;
+function change(val) {
+    cookie = val;
+}
+export {cookie, change};

@@ -1,8 +1,8 @@
 import Chat from "../models/chat.js"
 import  Message from "../models/message.js";
-import cookie from "../cookie.js";
+import {cookie} from "../cookie.js";
 export const addMessage = async (req, res) => {
-  const tokenUserId = cookie.get('userServerData')._id;
+  const tokenUserId = cookie._id;
   const chatId = req.params.chatId;
   const text = req.body.text;
 
