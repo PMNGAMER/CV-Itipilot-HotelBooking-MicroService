@@ -3,19 +3,14 @@ import { Link } from "react-router-dom";
 import { useNotificationStore } from "../../lib/notificationStore";
 import { useUser } from "../../context/UserContext";
 function Navbar() {
-
   const currentUser  = useUser();
-
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
-
   if(currentUser) fetch();
-
   return (
     <nav>
       <div className="left">
         <a href="/" className="logo">
-          <img src="/logo.png" alt="" />
           <span>Itipilot</span>
         </a>
       </div>
