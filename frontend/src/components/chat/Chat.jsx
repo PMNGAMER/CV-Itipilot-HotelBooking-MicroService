@@ -4,10 +4,21 @@ import axios from "axios";
 import { format } from "timeago.js";
 import { SocketContext } from "../../context/SocketContext";
 import { useNotificationStore } from "../../lib/notificationStore";
-import { useUser } from "../../context/UserContext";
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
-  const currentUser = useUser();
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4800/userdataclient"); // Assuming this route exists on your backend server
+        setUserData(response.data); // Assuming the token is returned in the response data
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+  const currentUser = userData;
   const { socket } = useContext(SocketContext);
   const messageEndRef = useRef();
   const decrease = useNotificationStore((state) => state.decrease);

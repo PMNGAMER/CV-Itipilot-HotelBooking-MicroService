@@ -5,12 +5,25 @@ import {Link} from "react-router-dom";
 import {useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import { useUser } from "../../context/UserContext";
 function ProfilePage() {
   const [userPosts, setUserPosts] = useState([]);
   const [userSavedPosts, setUserSavedPosts] = useState([]);
   const [userChats, setUserChats] = useState([]);
-  const currentUser = useUser();
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4800/userdataclient"); // Assuming this route exists on your backend server
+        setUserData(response.data); // Assuming the token is returned in the response data
+        console.log(useCookies().get('userData'));
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+  const currentUser = userData;
+  console.log(currentUser);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
