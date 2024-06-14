@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import "./filter.scss";
-import { useSearchParams } from "react-router-dom";
 
 function Filter() {
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState({
     type: searchParams.get("type") || "",
@@ -12,18 +13,16 @@ function Filter() {
     maxPrice: searchParams.get("maxPrice") || "",
     bedroom: searchParams.get("bedroom") || "",
   });
-
   const handleChange = (e) => {
     setQuery({
       ...query,
       [e.target.name]: e.target.value,
     });
   };
-
   const handleFilter = () => {
     setSearchParams(query);
+    navigate(`/list?${new URLSearchParams(query)}`); // Update URL with new query parameters
   };
-
   return (
     <div className="filter">
       <h1>
@@ -111,5 +110,4 @@ function Filter() {
     </div>
   );
 }
-
 export default Filter;

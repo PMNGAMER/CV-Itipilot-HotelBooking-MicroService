@@ -1,28 +1,32 @@
-import "./listPage.scss";
+// ListPage.js
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Filter from "../../components/filter/Filter";
 import Card from "../../components/card/Card";
-import { Await, useLoaderData } from "react-router-dom";
-import { Suspense } from "react";
 
 function ListPage() {
-  const data = useLoaderData();
+  const [postResponse, setPostResponse] = useState(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4800/posts${window.location.search}`); // Fetch posts with query parameters from URL
+        setPostResponse(response.data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+    fetchPosts();
+  }, [window.location.search]); // Fetch data whenever URL query parameters change
+
   return (
     <div className="listPage">
       <div className="listContainer">
         <div className="wrapper">
           <Filter />
-          <Suspense fallback={<p>Loading...</p>}>
-            <Await
-              resolve={data.postResponse}
-              errorElement={<p>Error loading posts!</p>}
-            >
-              {(postResponse) =>
-                postResponse.data.map((post) => (
-                  <Card key={post.id} item={post} />
-                ))
-              }
-            </Await>
-          </Suspense>
+          {postResponse && postResponse.map((post) => (
+            <Card key={post.id} item={post} />
+          ))}
         </div>
       </div>
     </div>

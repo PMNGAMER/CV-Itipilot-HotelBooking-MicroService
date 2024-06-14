@@ -1,6 +1,5 @@
 import Post from "../models/post.js";
 import SavedPost  from "../models/savedpost.js";
-import {cookie} from "../cookie.js";
 export const getPosts = async (req, res) => {
   const query = req.query;
 
@@ -27,7 +26,7 @@ export const getPosts = async (req, res) => {
 
 export const getPost = async (req, res) => {
   const id = req.params.id;
-  const uid = cookie._id;
+  const uid = req.userData._id;
   try {
     const post = await Post.findById(id).populate({
       path: "postDetail",
@@ -50,7 +49,7 @@ export const getPost = async (req, res) => {
 
 export const addPost = async (req, res) => {
   const body = req.body;
-  const tokenUserId = cookie._id;
+  const tokenUserId = req.userData._id;
 
 
   try {
@@ -79,7 +78,7 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   const id = req.params.id;
-  const tokenUserId = cookie._id;
+  const tokenUserId = req.userData._id;
 
 
   try {

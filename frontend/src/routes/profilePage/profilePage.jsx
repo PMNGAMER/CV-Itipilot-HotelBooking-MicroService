@@ -3,13 +3,14 @@ import List from "../../components/list/List";
 import "./profilePage.scss";
 import {Link} from "react-router-dom";
 import {useState } from "react";
-import { getCookie } from "../../cookie";
 import axios from "axios";
+import { useEffect } from "react";
+import { useUser } from "../../context/UserContext";
 function ProfilePage() {
   const [userPosts, setUserPosts] = useState([]);
   const [userSavedPosts, setUserSavedPosts] = useState([]);
   const [userChats, setUserChats] = useState([]);
-  const currentUser = getCookie('userData');
+  const currentUser = useUser();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -49,16 +50,11 @@ function ProfilePage() {
           </div>
           <div className="info">
             <span>
-              Avatar:
-              <img src={currentUser.avatar || "noavatar.jpg"} alt="" />
-            </span>
-            <span>
               Username: <b>{currentUser.username}</b>
             </span>
             <span>
               E-mail: <b>{currentUser.email}</b>
             </span>
-            <button onClick={handleLogout}>Logout</button>
           </div>
           <div className="title">
             <h1>My List</h1>

@@ -1,10 +1,10 @@
 import "./navbar.scss";
 import { Link } from "react-router-dom";
 import { useNotificationStore } from "../../lib/notificationStore";
-import { getCookie } from "../../cookie";
+import { useUser } from "../../context/UserContext";
 function Navbar() {
 
-  const currentUser  = getCookie('userData');
+  const currentUser  = useUser();
 
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
