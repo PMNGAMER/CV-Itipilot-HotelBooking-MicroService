@@ -39,6 +39,7 @@ export const deleteUser = async (req, res) => {
   }
 };
 export const getNotificationNumber = async (req, res) => {
+  console.log(req.userData);
   const tokenUserId = req.userData._id;
   try {
     const number = await Chat.countDocuments({
