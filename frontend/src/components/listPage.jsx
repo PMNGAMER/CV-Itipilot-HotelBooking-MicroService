@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import iaxios from "../../axiosSetUp";
-import SinglePage from "../singlePage/singlePage";
-import { cookie } from "../../cookie";
+import iaxios from "../axiosSetUp";
+import SinglePage from "./singlePage";
+import { cookie } from "../cookie";
+import "../styles/listPage.scss"
 function ListPage() {
   const [postResponse, setPostResponse] = useState([]);
   useEffect(() => {

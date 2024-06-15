@@ -1,11 +1,11 @@
-import "./profilePage.scss";
+import "../styles/profilePage.scss";
 import {Link} from "react-router-dom";
 import {useContext, useState } from "react";
-import iaxios from "../../axiosSetUp";
+import iaxios from "../axiosSetUp";
 import { useEffect } from "react";
-import { UserContext } from "../../context/UserContext";
-import { cookie } from "../../cookie";
-import SinglePage from "../singlePage/singlePage";
+import { UserContext } from "../context/UserContext";
+import { cookie } from "../cookie";
+import SinglePage from "./singlePage";
 function ProfilePage() {
   console.log('profile');
   const [userPostIds, setUserPostIds] = useState([]);

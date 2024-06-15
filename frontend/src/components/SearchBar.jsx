@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./searchBar.scss";
+import "../styles/searchBar.scss";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";

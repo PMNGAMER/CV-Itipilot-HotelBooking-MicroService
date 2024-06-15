@@ -1,6 +1,6 @@
-import "./newHotelPage.scss";
-import iaxios from "../../axiosSetUp";
-import { cookie } from "../../cookie";
+import "../styles/newHotelPage.scss";
+import iaxios from "../axiosSetUp";
+import { cookie } from "../cookie";
 function NewHotelPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();

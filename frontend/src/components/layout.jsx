@@ -1,9 +1,9 @@
-import "./layout.scss";
-import Navbar from "../navbar/Navbar";
-import SearchBar from "../searchBar/SearchBar";
+import "../styles/layout.scss";
+import Navbar from "./Navbar";
+import SearchBar from "./SearchBar";
 import { useContext } from "react";
-import { UserContext } from "../../context/UserContext";
-import { cookie } from "../../cookie";
+import { UserContext } from "../context/UserContext";
+import { cookie } from "../cookie";
 function Layout() {
   const userData = useContext(UserContext);
   const tmp = userData.userData;  

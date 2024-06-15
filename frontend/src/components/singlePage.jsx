@@ -1,8 +1,8 @@
-import "./singlePage.scss";
+import "../styles/singlePage.scss";
 import DOMPurify from "dompurify";
 import {useState } from "react";
-import iaxios from "../../axiosSetUp";
-import { cookie } from "../../cookie";
+import iaxios from "../axiosSetUp";
+import { cookie } from "../cookie";
 function SinglePage({id}) {
   const [post, setPostData] = useState(null);
   useEffect(() => {
