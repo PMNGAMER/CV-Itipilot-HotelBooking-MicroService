@@ -13,6 +13,8 @@ app.use(cors({
   origin: true,
 }));
 let data = null;
+const x= null;
+const y= null;
 const getUserData = async (req, res) => {
   try {
     data = req.body.data;
@@ -49,9 +51,18 @@ const Middleware = (req, res, next) => {
     res.status(500).json({ error: "Failed to get userData!" });
   }
 };
-
+const coordinateForMap = (req, res) => {
+  x = req.body.x;
+  y = req.body.y;
+  res.status(200).json("ok");
+}
+const getCoordinate = (req,res) =>{
+  res.status(200).json({x,y});
+}
 app.post("/userData", getUserData);
 app.get("/userdataclient", getUserDataForClientSide);
+app.post("/coordinateformap", coordinateForMap);
+app.get("/coordinateclient", getCoordinate);
 app.use(Middleware);
 app.use("/users", userRoute);
 app.use("/hotels", hotelRoute);
