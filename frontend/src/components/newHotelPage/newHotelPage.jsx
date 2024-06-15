@@ -1,4 +1,4 @@
-import "./newPostPage.scss";
+import "./newHotelPage.scss";
 import axios from "axios";
 import { cookie } from "../../cookie";
 function NewHotelPage() {

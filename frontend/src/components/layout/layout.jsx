@@ -9,6 +9,7 @@ function Layout() {
   const tmp = userData.userData;  
   const currentUser = tmp.data;
   cookie.set('userid', currentUser._id, {path:"/"});
+  console.log(cookie.get('userid'));
   return (
     <div className="layout">
       <div className="navbar">

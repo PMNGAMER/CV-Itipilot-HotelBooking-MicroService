@@ -1,4 +1,3 @@
-import List from "../../components/list/List";
 import "./profilePage.scss";
 import {Link} from "react-router-dom";
 import {useContext, useState } from "react";
@@ -6,8 +5,9 @@ import axios from "axios";
 import { useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 import { cookie } from "../../cookie";
+import SinglePage from "../singlePage/singlePage";
 function ProfilePage() {
-  const [userPosts, setUserPosts] = useState([]);
+  const [userPostIds, setUserPostIds] = useState([]);
   const userData = useContext(UserContext);
   const tmp = userData.userData;  
   const currentUser = tmp.data;
@@ -21,16 +21,7 @@ function ProfilePage() {
           }
         });
         const userData = response.data;
-        const postRequests = userData.posts.map(postId =>
-          axios.get(`http://localhost:4800/posts/${postId}`,{
-            headers:{
-              Authorization: `Bearer ${cookie.get('userid')}`,
-            }
-          })
-        );
-        const postResponses = await Promise.all(postRequests);
-        const postsData = postResponses.map(postResponse => postResponse.data);
-        setUserPosts(postsData);
+        setUserPostIds(userData.posts.map(postId => postId));
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -58,10 +49,7 @@ function ProfilePage() {
               <button>Create New Post</button>
             </Link>
           </div>
-          <List posts={userPosts} />
-          <div className="title">
-            <h1>Saved List</h1>
-          </div>
+          {userPostIds.map((pid)=><SinglePage id={pid}></SinglePage>)}
         </div>
       </div>
     </div>
