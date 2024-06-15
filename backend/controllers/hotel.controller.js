@@ -1,7 +1,8 @@
 import Hotel from "../models/hotel.js";
 
 export const getHotels = async (req, res) => {
-  const query = req.query;
+  const query = req.body;
+  console.log('hotel endpoint');
   try {
     const latitude = parseFloat(query.latitude);
     const longitude = parseFloat(query.longitude);

@@ -1,5 +1,5 @@
 import "./newHotelPage.scss";
-import axios from "axios";
+import iaxios from "../../axiosSetUp";
 import { cookie } from "../../cookie";
 function NewHotelPage() {
   const handleSubmit = async (e) => {
@@ -7,7 +7,7 @@ function NewHotelPage() {
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
     try {
-      const res = await axios.post("http://localhost:4800/posts",{
+      const res = await iaxios.post("http://localhost:4800/hotels",{
         headers:{
           Authorization: `Bearer ${cookie.get('userid')}`,
         }

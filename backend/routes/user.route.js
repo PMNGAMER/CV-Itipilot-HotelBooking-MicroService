@@ -6,7 +6,7 @@ import {
 } from "../controllers/user.controller.js";
 const router = express.Router();
 router.get("/", getUsers);
-router.get("/search/:id", getUser);
+router.get("/:id", getUser);
 router.delete("/:id", deleteUser);
 
 export default router;

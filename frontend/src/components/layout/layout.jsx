@@ -15,9 +15,7 @@ function Layout() {
       <div className="navbar">
         <Navbar />
       </div>
-      <div className="content">
-        <SearchBar/>
-      </div>
+      <SearchBar/>
     </div>
   );
 }

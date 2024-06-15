@@ -1,12 +1,13 @@
 import "./profilePage.scss";
 import {Link} from "react-router-dom";
 import {useContext, useState } from "react";
-import axios from "axios";
+import iaxios from "../../axiosSetUp";
 import { useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 import { cookie } from "../../cookie";
 import SinglePage from "../singlePage/singlePage";
 function ProfilePage() {
+  console.log('profile');
   const [userPostIds, setUserPostIds] = useState([]);
   const userData = useContext(UserContext);
   const tmp = userData.userData;  
@@ -15,12 +16,13 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4800/users/${currentUser._id}`,{
+        const response = await iaxios.get(`http://localhost:4800/users/${currentUser._id}`,{
           headers:{
             Authorization: `Bearer ${cookie.get('userid')}`,
           }
         });
         const userData = response.data;
+        console.log(userData);
         setUserPostIds(userData.posts.map(postId => postId));
       } catch (error) {
         console.error('Error fetching user data:', error);

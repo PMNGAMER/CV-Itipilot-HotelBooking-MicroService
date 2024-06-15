@@ -1,13 +1,13 @@
 import "./singlePage.scss";
 import DOMPurify from "dompurify";
 import {useState } from "react";
-import axios from "axios";
+import iaxios from "../../axiosSetUp";
 import { cookie } from "../../cookie";
 function SinglePage({id}) {
   const [post, setPostData] = useState(null);
   useEffect(() => {
     const fetchPostData = async () => {
-      const res = await axios.get("http://localhost:4800/posts/" + id,{
+      const res = await iaxios.get("http://localhost:4800/hotels/" + id,{
         headers:{
           Authorization: `Bearer ${cookie.get('userid')}`,
         }
