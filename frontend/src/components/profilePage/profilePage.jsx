@@ -8,8 +8,6 @@ import { useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 function ProfilePage() {
   const [userPosts, setUserPosts] = useState([]);
-  const [userSavedPosts, setUserSavedPosts] = useState([]);
-  const [userChats, setUserChats] = useState([]);
   const userData = useContext(UserContext);
   const tmp = userData.userData;  
   const currentUser = tmp.data;
@@ -25,19 +23,6 @@ function ProfilePage() {
         const postResponses = await Promise.all(postRequests);
         const postsData = postResponses.map(postResponse => postResponse.data);
         setUserPosts(postsData);
-        const postSavedRequests = userData.savedPosts.map(postId =>
-          axios.get(`http://localhost:4800/posts/${postId}`)
-        );
-        const postSavedResponses = await Promise.all(postSavedRequests);
-        const postsSavedData = postSavedResponses.map(postResponse => postResponse.data);
-        setUserSavedPosts(postsSavedData);
-        const chatRequests = userData.chats.map(chatId =>
-          axios.get(`http://localhost:4800/chats/${chatId}`)
-        );
-        const chatResponses = await Promise.all(chatRequests);
-        const chatsData = chatResponses.map(chatResponse => chatResponse.data);
-        setUserChats(chatsData);
-        
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -69,12 +54,6 @@ function ProfilePage() {
           <div className="title">
             <h1>Saved List</h1>
           </div>
-          <List posts={userSavedPosts} />
-        </div>
-      </div>
-      <div className="chatContainer">
-        <div className="wrapper">
-          <Chat chats={userChats}/>   
         </div>
       </div>
     </div>

@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Filter from "../../components/filter/Filter";
-import Card from "../../components/card/Card";
-
 function ListPage() {
   const [postResponse, setPostResponse] = useState(null);
 
@@ -24,9 +22,6 @@ function ListPage() {
       <div className="listContainer">
         <div className="wrapper">
           <Filter />
-          {postResponse && postResponse.map((post) => (
-            <Card key={post.id} item={post} />
-          ))}
         </div>
       </div>
     </div>

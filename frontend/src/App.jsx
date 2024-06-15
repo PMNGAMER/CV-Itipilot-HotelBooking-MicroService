@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ListPage from "./routes/listPage/listPage";
-import { Layout } from "./routes/layout/layout";
-import SinglePage from "./routes/singlePage/singlePage";
-import NewPostPage from "./routes/newPostPage/newPostPage";
-import ProfilePage from "./routes/profilePage/profilePage";
+import ListPage from "./components/listPage/listPage";
+import { Layout } from "./components/layout/layout";
+import SinglePage from "./components/singlePage/singlePage";
+import NewHotelPage from "./components/newHotelPage/newHotelPage";
+import ProfilePage from "./components/profilePage/profilePage";
 import { UserContext } from "./context/UserContext";
 import { SocketContextProvider } from "./context/SocketContext";
 function App() {
@@ -23,7 +23,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="list" element={<ListPage />} />
             <Route path=":id" element={<SinglePage />} />
-            <Route path="add" element={<NewPostPage />} />
+            <Route path="add" element={<NewHotelPage />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Routes>

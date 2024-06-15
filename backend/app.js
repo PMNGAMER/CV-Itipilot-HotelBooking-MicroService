@@ -1,10 +1,8 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import postRoute from "./routes/post.route.js";
+import hotelRoute from "./routes/hotel.route.js";
 import userRoute from "./routes/user.route.js";
-import chatRoute from "./routes/chat.route.js";
-import messageRoute from "./routes/message.route.js";
 import { connectDB } from "./db/db.js"; 
 connectDB();
 let data = null;
@@ -56,9 +54,7 @@ app.post("/userData", getUserData);
 app.get("/userdataclient", getUserDataForClientSide);
 app.use(Middleware);
 app.use("/users", userRoute);
-app.use("/posts", postRoute);
-app.use("/chats", chatRoute);
-app.use("/messages", messageRoute);
+app.use("/hotels", hotelRoute);
 app.listen(4800, () => {
   console.log("Server is running!");
 });
