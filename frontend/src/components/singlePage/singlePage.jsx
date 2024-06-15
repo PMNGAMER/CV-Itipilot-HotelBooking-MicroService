@@ -30,7 +30,8 @@ function SinglePage({id}) {
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <span>{post.user.username}</span>
+                <span>{post.userId.name}</span>
+                <span>{post.userId.phone}</span>
               </div>
             </div>
             <div

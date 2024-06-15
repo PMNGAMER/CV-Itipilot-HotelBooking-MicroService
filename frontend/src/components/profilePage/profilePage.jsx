@@ -21,9 +21,9 @@ function ProfilePage() {
             Authorization: `Bearer ${cookie.get('userid')}`,
           }
         });
-        const userData = response.data;
-        console.log(userData);
-        setUserPostIds(userData.posts.map(postId => postId));
+        const userDataRes = response.data;
+        console.log(userDataRes);
+        setUserPostIds(userDataRes.posts.map(postId => postId));
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -39,10 +39,13 @@ function ProfilePage() {
           </div>
           <div className="info">
             <span>
-              Username: <b>{currentUser.username}</b>
+              Username: <b>{currentUser.name}</b>
             </span>
             <span>
               E-mail: <b>{currentUser.email}</b>
+            </span>
+            <span>
+              Phone: <b>{currentUser.phone}</b>
             </span>
           </div>
           <div className="title">
