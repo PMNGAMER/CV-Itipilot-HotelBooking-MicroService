@@ -1,23 +1,12 @@
 import "./navbar.scss";
 import { Link } from "react-router-dom";
 import { useNotificationStore } from "../../lib/notificationStore";
-import { useEffect } from "react";
-import axios from "axios";
-import { useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 function Navbar() {
-  const [userData, setUserData] = useState(null);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4800/userdataclient"); // Assuming this route exists on your backend server
-        setUserData(response.data); // Assuming the token is returned in the response data
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
-  const currentUser  = userData;
+  const userData = useContext(UserContext);
+  const tmp = userData.userData;  
+  const currentUser = tmp.data;
   console.log(currentUser);
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);

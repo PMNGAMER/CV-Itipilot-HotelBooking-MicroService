@@ -11,6 +11,7 @@ let data = null;
 const getUserData = async (req, res) => {
   try {
     data = req.body.data;
+    console.log(data);
       res.status(200).json("ok" );
     } catch (err) {
       console.log(err);
@@ -19,9 +20,28 @@ const getUserData = async (req, res) => {
 };
 const getUserDataForClientSide = async (req, res) => {
   try {
-    res.status(200).json({data});
+    while (data === null) {
+      await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 100ms before checking again
+    }
+    console.log(data);
+    console.log("client");
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
+    console.error("Error awaiting data:", err);
+    res.status(500).json("Failed to get userData!");
+  }
+};
+const Middleware = async (req, res, next) => {
+  try {
+    while (data === null) {
+      await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 100ms before checking again
+    }
+    console.log(data);
+    console.log("middleware");
+    req.userData = data;
+    next();
+  } catch (err) {
+    console.error("Error awaiting data:", err);
     res.status(500).json("Failed to get userData!");
   }
 };
@@ -33,10 +53,6 @@ app.use(cors({
   origin: true,
 }));
 app.post("/userData", getUserData);
-const Middleware = (req, res, next) => {
-  req.userData = data;
-  next();
-};
 app.get("/userdataclient", getUserDataForClientSide);
 app.use(Middleware);
 app.use("/users", userRoute);
