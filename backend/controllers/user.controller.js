@@ -22,7 +22,7 @@ export const getUser = async (req, res) => {
 };
 export const deleteUser = async (req, res) => {
   const id = req.params.id;
-  const tokenUserId = req.userData._id;
+  const tokenUserId = req.userData;
   if (id !== tokenUserId) {
     return res.status(403).json({ message: "Not Authorized!" });
   }

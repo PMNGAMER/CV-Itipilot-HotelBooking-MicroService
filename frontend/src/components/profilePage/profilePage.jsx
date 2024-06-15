@@ -1,4 +1,3 @@
-import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
 import "./profilePage.scss";
 import {Link} from "react-router-dom";
@@ -6,6 +5,7 @@ import {useContext, useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
+import { cookie } from "../../cookie";
 function ProfilePage() {
   const [userPosts, setUserPosts] = useState([]);
   const userData = useContext(UserContext);
@@ -15,10 +15,18 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4800/users/${currentUser._id}`);
+        const response = await axios.get(`http://localhost:4800/users/${currentUser._id}`,{
+          headers:{
+            Authorization: `Bearer ${cookie.get('userid')}`,
+          }
+        });
         const userData = response.data;
         const postRequests = userData.posts.map(postId =>
-          axios.get(`http://localhost:4800/posts/${postId}`)
+          axios.get(`http://localhost:4800/posts/${postId}`,{
+            headers:{
+              Authorization: `Bearer ${cookie.get('userid')}`,
+            }
+          })
         );
         const postResponses = await Promise.all(postRequests);
         const postsData = postResponses.map(postResponse => postResponse.data);
@@ -59,5 +67,4 @@ function ProfilePage() {
     </div>
   );
 }
-
 export default ProfilePage;

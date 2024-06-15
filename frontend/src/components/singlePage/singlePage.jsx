@@ -2,12 +2,16 @@ import "./singlePage.scss";
 import DOMPurify from "dompurify";
 import {useState } from "react";
 import axios from "axios";
-function SinglePage() {
+import { cookie } from "../../cookie";
+function SinglePage({id}) {
   const [post, setPostData] = useState(null);
-  const { id } = useParams();
   useEffect(() => {
     const fetchPostData = async () => {
-      const res = await axios.get("http://localhost:4800/posts/" + id);
+      const res = await axios.get("http://localhost:4800/posts/" + id,{
+        headers:{
+          Authorization: `Bearer ${cookie.get('userid')}`,
+        }
+      });
       setPostData(res.data);
     };
     fetchPostData();
@@ -42,16 +46,12 @@ function SinglePage() {
         <div className="wrapper">
           <div className="sizes">
             <div className="size">
-              <img src="/size.png" alt="" />
-              <span>{post.postDetail.size} sqft</span>
-            </div>
-            <div className="size">
               <img src="/bed.png" alt="" />
               <span>{post.bedroom} beds</span>
             </div>
             <div className="size">
               <img src="/bath.png" alt="" />
-              <span>{post.bathroom} bathroom</span>
+              <span>{post.bathroom} bathrooms</span>
             </div>
           </div>
         </div>

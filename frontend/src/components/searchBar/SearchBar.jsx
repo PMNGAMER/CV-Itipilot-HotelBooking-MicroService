@@ -8,10 +8,11 @@ function SearchBar() {
     minPrice: "",
     maxPrice: "",
     bedroom: "",
-    latitude: "",
-    longitude: "",
     radiusInKm: "",
+    bathroom: "",
   });
+  const longtitude = 0;
+  const latitude = 0;
   const handleChange = (e) => {
     setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -53,16 +54,10 @@ function SearchBar() {
         />
         <input
           type="number"
-          name="latitude"
-          placeholder="Latitude"
-          value={query.latitude}
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="longitude"
-          placeholder="Longitude"
-          value={query.longitude}
+          name="bathroom"
+          min={0}
+          placeholder="Bathrooms"
+          value={query.bathroom}
           onChange={handleChange}
         />
         <input
@@ -73,7 +68,7 @@ function SearchBar() {
           onChange={handleChange}
         />
         <Link
-          to={`/list?city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&bedroom=${query.bedroom}&latitude=${query.latitude}&longitude=${query.longitude}&radiusInKm=${query.radiusInKm}`}
+          to={`/list?latitude=${latitude}&longtitude=${longtitude}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&bedroom=${query.bedroom}&bathroom=${query.bathroom}&latitude=${query.latitude}&longitude=${query.longitude}&radiusInKm=${query.radiusInKm}`}
         >
           <button type="submit">
             <img src="/search.png" alt="Search" />

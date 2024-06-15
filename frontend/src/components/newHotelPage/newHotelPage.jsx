@@ -1,16 +1,17 @@
 import "./newPostPage.scss";
-import "react-quill/dist/quill.snow.css";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { cookie } from "../../cookie";
 function NewHotelPage() {
-  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
     try {
-      const res = await axios.post("http://localhost:4800/posts", {
+      const res = await axios.post("http://localhost:4800/posts",{
+        headers:{
+          Authorization: `Bearer ${cookie.get('userid')}`,
+        }
+      }, {
         price: parseInt(inputs.price),
         address: inputs.address,
         city: inputs.city,
@@ -19,22 +20,17 @@ function NewHotelPage() {
         latitude: inputs.latitude,
         longitude: inputs.longitude,
       });
-      navigate("/"+res.data.id)
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
   };
-
   return (
     <div className="newPostPage">
       <div className="formContainer">
         <h1>Add New Post</h1>
         <div className="wrapper">
           <form onSubmit={handleSubmit}>
-            <div className="item">
-              <label htmlFor="title">Title</label>
-              <input id="title" name="title" type="text" />
-            </div>
             <div className="item">
               <label htmlFor="price">Price</label>
               <input id="price" name="price" type="number" />
@@ -73,5 +69,4 @@ function NewHotelPage() {
     </div>
   );
 }
-
 export default NewHotelPage;
