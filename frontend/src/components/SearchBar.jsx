@@ -29,9 +29,7 @@ function SearchBar() {
   if (longtitude){
     return null;
   }
-  // const longtitude = 0;
-  // const latitude = 0;
-
+  console.log(longtitude," , ", latitude);
   const handleChange = (e) => {
     setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
