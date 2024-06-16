@@ -8,18 +8,18 @@ export const getHotels = async (req, res) => {
     const latitude = parseFloat(query.latitude);
     const longtitude = parseFloat(query.longtitude);
     const radiusInKm = parseFloat(query.radiusInKm);
-    const deltaLongitude = Math.atan2(
+    const deltaLongtitude = Math.atan2(
       Math.sin(radiusInKm / EARTH_RADIUS_KM) * Math.cos(latitude * Math.PI / 180),
       Math.cos(radiusInKm / EARTH_RADIUS_KM) - Math.sin(latitude * Math.PI / 180) * Math.sin(latitude * Math.PI / 180)
     );
-    const minLongitude = longtitude - deltaLongitude * (180 / Math.PI);
-    const maxLongitude = longtitude + deltaLongitude * (180 / Math.PI);
+    const minLongtitude = longtitude - deltaLongtitude * (180 / Math.PI);
+    const maxLongtitude = longtitude + deltaLongtitude * (180 / Math.PI);
     const deltaLatitude = (radiusInKm / EARTH_RADIUS_KM) * (180 / Math.PI);
     const minLatitude = latitude - deltaLatitude;
     const maxLatitude = latitude + deltaLatitude;
     const filter = {
       latitude: { $gte: minLatitude, $lte: maxLatitude },
-      longitude: { $gte: minLongitude, $lte: maxLongitude },
+      longtitude: { $gte: minLongtitude, $lte: maxLongtitude },
       city: query.city || { $exists: true },
       bedroom: parseInt(query.bedroom) || { $exists: true },
       price: {

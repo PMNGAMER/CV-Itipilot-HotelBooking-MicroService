@@ -18,16 +18,18 @@ function SearchBar() {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("http://localhost:4800/coordinateclient");
-        setLongtitude(response.data.x);
-        setLatitude(response.data.y);
+        if (response.data.x !== null && response.data.y !== null) {
+          setLongtitude(response.data.x);
+          setLatitude(response.data.y);
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
     fetchUserData();
   }, []);
-  if (longtitude){
-    return null;
+  if (longtitude === null || latitude === null) {
+    return <div>Loading...</div>;
   }
   console.log(longtitude," , ", latitude);
   const handleChange = (e) => {
