@@ -55,7 +55,9 @@ function ProfilePage() {
               <button>Create New Hotel Post</button>
             </Link>
           </div>
+          <div style={{display:'flex',flexWrap:'wrap'}}>
           {userHotelIds.map((hid)=><SinglePage id={hid}></SinglePage>)}
+          </div>
         </div>
       </div>
     </div>
