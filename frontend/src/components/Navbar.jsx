@@ -2,6 +2,7 @@ import "../styles/navbar.scss";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { Avartar } from "./avatarPage";
 function Navbar() {
   const userData = useContext(UserContext);
   const tmp = userData.userData;  
@@ -16,8 +17,8 @@ function Navbar() {
       </div>
       <div className="right">
         <div className="user">
-          <span>{currentUser.name}</span>
-          <Link to="/profile" className="profile">
+        <Avartar imageId={currentUser.imageId}></Avartar>
+        <Link to="/profile" className="profile">
             <span>Profile</span>
           </Link>
         </div>

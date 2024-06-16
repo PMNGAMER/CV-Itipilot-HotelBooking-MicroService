@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 const {Schema} = mongoose;
 const UserSchema = new Schema({
+  imageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Image' }, 
   name: String,
   email: {type:String, unique:true},
   password: String,

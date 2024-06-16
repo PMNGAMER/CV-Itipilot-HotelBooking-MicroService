@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { cookie } from "../cookie";
 import SinglePage from "./singlePage";
+import { Avartar } from "./avatarPage";
 function ProfilePage() {
   console.log('profile');
   const [userHotelIds, setUserHotelIds] = useState([]);
@@ -35,6 +36,7 @@ function ProfilePage() {
     <div className="profilePage">
       <div className="details">
         <div className="wrapper">
+          <Avartar imageId={currentUser.imageId}></Avartar>
           <div className="title">
             <h1>User Information</h1>
           </div>
