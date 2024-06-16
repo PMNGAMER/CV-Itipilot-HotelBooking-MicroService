@@ -8,7 +8,7 @@ import { cookie } from "../cookie";
 import SinglePage from "./singlePage";
 function ProfilePage() {
   console.log('profile');
-  const [userPostIds, setUserPostIds] = useState([]);
+  const [userHotelIds, setUserHotelIds] = useState([]);
   const userData = useContext(UserContext);
   const tmp = userData.userData;  
   const currentUser = tmp.data;
@@ -23,7 +23,7 @@ function ProfilePage() {
         });
         const userDataRes = response.data;
         console.log(userDataRes);
-        setUserPostIds(userDataRes.posts.map(postId => postId));
+        setUserHotelIds(userDataRes.hotels.map(hotelId => hotelId));
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -51,10 +51,10 @@ function ProfilePage() {
           <div className="title">
             <h1>My List</h1>
             <Link to="/add">
-              <button>Create New Post</button>
+              <button>Create New Hotel Post</button>
             </Link>
           </div>
-          {userPostIds.map((pid)=><SinglePage id={pid}></SinglePage>)}
+          {userHotelIds.map((hid)=><SinglePage id={hid}></SinglePage>)}
         </div>
       </div>
     </div>

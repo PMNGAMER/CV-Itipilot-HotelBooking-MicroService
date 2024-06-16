@@ -12,25 +12,25 @@ function SearchBar() {
     radiusInKm: "",
     bathroom: "",
   });
-  // const [longtitude, setLongtitude] = useState(null);
-  // const [latitude, setLatitude] = useState(null);
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:4800/coordinateclient");
-  //       setLongtitude(response.data.x);
-  //       setLatitude(response.data.y);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-  //   fetchUserData();
-  // }, []);
-  // if (longtitude){
-  //   return null;
-  // }
-  const longtitude = 0;
-  const latitude = 0;
+  const [longtitude, setLongtitude] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4800/coordinateclient");
+        setLongtitude(response.data.x);
+        setLatitude(response.data.y);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+  if (longtitude){
+    return null;
+  }
+  // const longtitude = 0;
+  // const latitude = 0;
 
   const handleChange = (e) => {
     setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));

@@ -40,7 +40,6 @@ function ListPage() {
         console.error("Error fetching posts:", error);
       }
     };
-
     fetchPosts();
   }, [window.location.search]);
   return (

@@ -1,20 +1,19 @@
 import "../styles/singlePage.scss";
-import DOMPurify from "dompurify";
 import {useState } from "react";
 import iaxios from "../axiosSetUp";
 import { cookie } from "../cookie";
 function SinglePage({id}) {
-  const [post, setPostData] = useState(null);
+  const [hotel, setHotelData] = useState(null);
   useEffect(() => {
-    const fetchPostData = async () => {
+    const fetchHotelData = async () => {
       const res = await iaxios.get("http://localhost:4800/hotels/" + id,{
         headers:{
           Authorization: `Bearer ${cookie.get('userid')}`,
         }
       });
-      setPostData(res.data);
+      setHotelData(res.data);
     };
-    fetchPostData();
+    fetchHotelData();
   }, [id]);
   return (
     <div className="singlePage">
@@ -25,21 +24,15 @@ function SinglePage({id}) {
               <div className="post">
                 <div className="address">
                   <img src="/pin.png" alt="" />
-                  <span>{post.address}</span>
+                  <span>{hotel.address}</span>
                 </div>
-                <div className="price">$ {post.price}</div>
+                <div className="price">$ {hotel.price}</div>
               </div>
               <div className="user">
-                <span>{post.userId.name}</span>
-                <span>{post.userId.phone}</span>
+                <span>{hotel.userId.name}</span>
+                <span>{hotel.userId.phone}</span>
               </div>
             </div>
-            <div
-              className="bottom"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(post.postDetail.desc),
-              }}
-            ></div>
           </div>
         </div>
       </div>
@@ -48,11 +41,11 @@ function SinglePage({id}) {
           <div className="sizes">
             <div className="size">
               <img src="/bed.png" alt="" />
-              <span>{post.bedroom} beds</span>
+              <span>{hotel.bedroom} beds</span>
             </div>
             <div className="size">
               <img src="/bath.png" alt="" />
-              <span>{post.bathroom} bathrooms</span>
+              <span>{hotel.bathroom} bathrooms</span>
             </div>
           </div>
         </div>

@@ -39,9 +39,6 @@ function NewHotelPage() {
               <label htmlFor="address">Address</label>
               <input id="address" name="address" type="text" />
             </div>
-            <div className="item description">
-              <label htmlFor="desc">Description</label>
-            </div>
             <div className="item">
               <label htmlFor="city">City</label>
               <input id="city" name="city" type="text" />
