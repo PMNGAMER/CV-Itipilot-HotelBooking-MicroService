@@ -39,7 +39,7 @@ export const getHotel = async (req, res) => {
   try {
     const hotel = await Hotel.findById(id).populate({
       path: 'userId', 
-      select: 'name phone', 
+      select: 'name', 
       model: 'User', 
     });
     if (!hotel) {

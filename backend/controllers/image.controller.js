@@ -1,4 +1,4 @@
-import Image from "../models/Image";
+import Image from "../models/Image.js";
 async function uploadImage(req, res) {
     try {
         if (!req.file) {

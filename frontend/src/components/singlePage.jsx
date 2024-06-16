@@ -1,59 +1,35 @@
 import "../styles/singlePage.scss";
-import {useState } from "react";
+import { useState, useEffect } from "react";
 import iaxios from "../axiosSetUp";
-import { cookie } from "../cookie";
 import { SingleImage } from "./imagePage";
-function SinglePage({id}) {
+function SinglePage({ id }) {
   const [hotel, setHotelData] = useState(null);
   useEffect(() => {
     const fetchHotelData = async () => {
-      const res = await iaxios.get("http://localhost:4800/hotels/" + id,{
-        headers:{
-          Authorization: `Bearer ${cookie.get('userid')}`,
-        }
-      });
-      setHotelData(res.data);
+      try {
+        const res = await iaxios.get(`http://localhost:4800/hotels/${id}`);
+        setHotelData(res.data);
+      } catch (error) {
+        console.error("Error fetching hotel data:", error);
+      }
     };
     fetchHotelData();
-  }, [id]);
+  }, []); 
+  console.log(hotel);
   return (
-    <div className="singlePage">
-      <div className="details">
-        <div className="wrapper">
-          <div className="info">
-            <div className="top">
-              <div className="post">
-                <SingleImage imageId={hotel.imageId}></SingleImage>
-                <div className="address">
-                  <img src="/pin.png" alt="" />
-                  <span>{hotel.address}</span>
-                </div>
-                <div className="price">$ {hotel.price}</div>
-              </div>
-              <div className="user">
-                <span>{hotel.userId.name}</span>
-                <span>{hotel.userId.phone}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="features">
-        <div className="wrapper">
-          <div className="sizes">
-            <div className="size">
-              <img src="/bed.png" alt="" />
-              <span>{hotel.bedroom} beds</span>
-            </div>
-            <div className="size">
-              <img src="/bath.png" alt="" />
-              <span>{hotel.bathroom} bathrooms</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="singlePageContainer">
+      {hotel && hotel.imageId ? (
+        <SingleImage imageId={hotel.imageId} />
+      ) : null}
+      <span>{hotel ? hotel.address : "Loading..."}</span>
+      <div>$ {hotel ? hotel.price : "Loading..."}</div>
+      <span>{hotel && hotel.userId ? hotel.userId.name : "Loading..."}</span>
+      <span>{hotel && hotel.userId ? hotel.userId.phone : "Loading..."}</span>
+      <img src="/bed.png" alt="" />
+      <span>{hotel ? hotel.bedroom + " beds" : "Loading..."}</span>
+      <img src="/bath.png" alt="" />
+      <span>{hotel ? hotel.bathroom + " bathrooms" : "Loading..."}</span>
     </div>
   );
 }
-
 export default SinglePage;

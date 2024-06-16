@@ -16,6 +16,7 @@ function Navbar() {
       </div>
       <div className="right">
         <div className="user">
+          <span>{currentUser.name}</span>
           <Link to="/profile" className="profile">
             <span>Profile</span>
           </Link>
@@ -24,5 +25,4 @@ function Navbar() {
     </nav>
   );
 }
-
 export default Navbar;

@@ -30,7 +30,7 @@ export const ImageUploader = ({ onImageUpload }) => {
     return (
         <div>
             <input type="file" onChange={handleFileChange} />
-            {previewURL && <img src={previewURL} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '10px' }} />}
+            {previewURL && <img src={previewURL} alt="Preview" style={{ width: '30%', height: '300px', marginTop: '10px' }} />}
             <button onClick={handleUpload}>Upload</button>
         </div>
     );

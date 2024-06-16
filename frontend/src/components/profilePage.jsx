@@ -30,6 +30,7 @@ function ProfilePage() {
     };
     fetchUserData();
   }, [currentUser]);
+  console.log(userHotelIds);
   return (
     <div className="profilePage">
       <div className="details">
