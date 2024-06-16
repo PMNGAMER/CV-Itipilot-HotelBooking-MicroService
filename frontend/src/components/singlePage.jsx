@@ -2,6 +2,7 @@ import "../styles/singlePage.scss";
 import {useState } from "react";
 import iaxios from "../axiosSetUp";
 import { cookie } from "../cookie";
+import { SingleImage } from "./imagePage";
 function SinglePage({id}) {
   const [hotel, setHotelData] = useState(null);
   useEffect(() => {
@@ -22,6 +23,7 @@ function SinglePage({id}) {
           <div className="info">
             <div className="top">
               <div className="post">
+                <SingleImage imageId={hotel.imageId}></SingleImage>
                 <div className="address">
                   <img src="/pin.png" alt="" />
                   <span>{hotel.address}</span>

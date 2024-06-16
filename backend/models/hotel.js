@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const hotelSchema = new mongoose.Schema({
+  imageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Image' }, 
   price: Number,
   address: String,
   city: String,

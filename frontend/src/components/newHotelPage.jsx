@@ -1,13 +1,20 @@
 import "../styles/newHotelPage.scss";
 import iaxios from "../axiosSetUp";
 import { cookie } from "../cookie";
+import { ImageUploader } from "./imageUploader";
+import { useState } from "react";
 function NewHotelPage() {
+  const [imageId, setImageId] = useState(null);
+  const onImage = (imgId) =>{
+    setImageId(imgId);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
     try {
       const res = await iaxios.post("http://localhost:4800/hotels", {
+        imageId : imageId,
         price: parseInt(inputs.price),
         address: inputs.address,
         city: inputs.city,
@@ -30,6 +37,7 @@ function NewHotelPage() {
       <div className="formContainer">
         <h1>Add New Post</h1>
         <div className="wrapper">
+          <ImageUploader onImageUpload={onImage}></ImageUploader>
           <form onSubmit={handleSubmit}>
             <div className="item">
               <label htmlFor="price">Price</label>
