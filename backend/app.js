@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import hotelRoute from "./routes/hotel.route.js";
-import userRoute from "./routes/user.route.js";
 import { connectDB } from "./db/db.js"; 
+import {getUser} from "./controllers/user.controller.js";
+import {getHotel, getHotels, addHotel, deleteHotel} from "./controllers/hotel.controller.js";
 connectDB();
 const app = express();
 app.use(express.json());
@@ -13,8 +13,8 @@ app.use(cors({
   origin: true,
 }));
 let data = null;
-const x= null;
-const y= null;
+let x= null;
+let y= null;
 const getUserData = async (req, res) => {
   try {
     data = req.body.data;
@@ -28,7 +28,7 @@ const getUserData = async (req, res) => {
 const getUserDataForClientSide = async (req, res) => {
   try {
     while (data === null) {
-      await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 100ms before checking again
+      await new Promise(resolve => setTimeout(resolve, 10000)); 
     }
     console.log(data);
     console.log("client");
@@ -41,10 +41,10 @@ const getUserDataForClientSide = async (req, res) => {
 const Middleware = (req, res, next) => {
   try {
     if (req.cookies && req.cookies.userid) {
-      req.userData = req.cookies.userid; // Assuming 'userid' is the correct cookie key
+      req.userData = req.cookies.userid; 
       next();
     } else {
-      throw new Error('User ID cookie not found'); // Throw an error if 'userid' cookie is missing
+      throw new Error('User ID cookie not found'); 
     }
   } catch (err) {
     console.error("Error retrieving user data:", err);
@@ -63,9 +63,11 @@ app.post("/userData", getUserData);
 app.get("/userdataclient", getUserDataForClientSide);
 app.post("/coordinateformap", coordinateForMap);
 app.get("/coordinateclient", getCoordinate);
-app.use(Middleware);
-app.use("/users", userRoute);
-app.use("/hotels", hotelRoute);
+app.get("/users/:id",Middleware, getUser);
+app.post("/hotels/search",Middleware, getHotels);
+app.get("/hotels/:id", Middleware, getHotel);
+app.post("/hotels", Middleware, addHotel);
+app.delete("/hotels/:id", Middleware, deleteHotel);
 app.listen(4800, () => {
   console.log("Server is running!");
 });

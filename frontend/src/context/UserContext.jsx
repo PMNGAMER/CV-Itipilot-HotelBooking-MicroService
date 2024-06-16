@@ -6,14 +6,16 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await iaxios.get("http://localhost:4800/userdataclient"); // Assuming this route exists on your backend server
-        setUserData(response.data); // Assuming the token is returned in the response data
+        const response = await iaxios.get("http://localhost:4800/userdataclient");
+        setUserData(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-    fetchUserData();
-  }, []);
+    if (userData === null) {
+      fetchUserData();
+    }
+  }, [userData]); 
   console.log(userData);
   return (
     <UserContext.Provider value={{ userData }}>

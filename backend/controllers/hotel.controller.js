@@ -1,27 +1,36 @@
 import Hotel from "../models/hotel.js";
 import User from "../models/user.js";
+const EARTH_RADIUS_KM = 6371;
 export const getHotels = async (req, res) => {
   const query = req.body;
-  console.log('hotel endpoint');
+  console.log(query);
   try {
     const latitude = parseFloat(query.latitude);
-    const longitude = parseFloat(query.longitude);
+    const longtitude = parseFloat(query.longtitude);
     const radiusInKm = parseFloat(query.radiusInKm);
+    const deltaLongitude = Math.atan2(
+      Math.sin(radiusInKm / EARTH_RADIUS_KM) * Math.cos(latitude * Math.PI / 180),
+      Math.cos(radiusInKm / EARTH_RADIUS_KM) - Math.sin(latitude * Math.PI / 180) * Math.sin(latitude * Math.PI / 180)
+    );
+    const minLongitude = longtitude - deltaLongitude * (180 / Math.PI);
+    const maxLongitude = longtitude + deltaLongitude * (180 / Math.PI);
+    const deltaLatitude = (radiusInKm / EARTH_RADIUS_KM) * (180 / Math.PI);
+    const minLatitude = latitude - deltaLatitude;
+    const maxLatitude = latitude + deltaLatitude;
     const filter = {
-      $geoWithin: {
-        $centerSphere: [[longitude, latitude], radiusInKm / 6378.1]
-      },
-      city: query.city || undefined,
-      bedroom: parseInt(query.bedroom) || undefined,
+      latitude: { $gte: minLatitude, $lte: maxLatitude },
+      longitude: { $gte: minLongitude, $lte: maxLongitude },
+      city: query.city || { $exists: true },
+      bedroom: parseInt(query.bedroom) || { $exists: true },
       price: {
-        $gte: parseInt(query.minPrice) || undefined,
-        $lte: parseInt(query.maxPrice) || undefined,
-      },
+        $gte: parseInt(query.minPrice) || { $exists: true },
+        $lte: parseInt(query.maxPrice) || { $exists: true }
+      }
     };
-    const Hotels = await Hotel.find(filter);
-    res.status(200).json(Hotels);
+    const hotels = await Hotel.find(filter);
+    res.status(200).json(hotels);
   } catch (err) {
-    console.log(err);
+    console.error("Failed to get Hotels:", err);
     res.status(500).json({ message: "Failed to get Hotels" });
   }
 };
@@ -44,6 +53,8 @@ export const getHotel = async (req, res) => {
 };
 export const addHotel = async (req, res) => {
   const body = req.body;
+  console.log(body);
+  console.log("body ");
   const tokenUserId = req.userData;
   try {
     const newHotel = await Hotel.create({

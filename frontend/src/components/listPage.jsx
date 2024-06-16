@@ -15,7 +15,7 @@ function ListPage() {
         const bedroom = params.get("bedroom");
         const bathroom = params.get("bathroom");
         const latitude = params.get("latitude");
-        const longitude = params.get("longitude");
+        const longtitude = params.get("longtitude");
         const radiusInKm = params.get("radiusInKm");
         const response = await iaxios.post(
           `http://localhost:4800/hotels/search`,
@@ -26,7 +26,7 @@ function ListPage() {
             bedroom,
             bathroom,
             latitude,
-            longitude,
+            longtitude,
             radiusInKm,
           },
           {

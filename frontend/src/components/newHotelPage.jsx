@@ -7,11 +7,7 @@ function NewHotelPage() {
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
     try {
-      const res = await iaxios.post("http://localhost:4800/hotels",{
-        headers:{
-          Authorization: `Bearer ${cookie.get('userid')}`,
-        }
-      }, {
+      const res = await iaxios.post("http://localhost:4800/hotels", {
         price: parseInt(inputs.price),
         address: inputs.address,
         city: inputs.city,
@@ -19,8 +15,12 @@ function NewHotelPage() {
         bathroom: parseInt(inputs.bathroom),
         latitude: inputs.latitude,
         longitude: inputs.longitude,
+      },{
+        headers:{
+          Authorization: `Bearer ${cookie.get('userid')}`,
+        }
       });
-      console.log(res);
+      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
