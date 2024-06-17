@@ -30,9 +30,6 @@ const getUserData = async (req, res) => {
 };
 const getUserDataForClientSide = async (req, res) => {
   try {
-    while (data === null) {
-      await new Promise(resolve => setTimeout(resolve, 10000)); 
-    }
     console.log(data);
     console.log("client");
     res.status(200).json({ data });
