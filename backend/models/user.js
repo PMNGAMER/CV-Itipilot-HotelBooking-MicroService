@@ -8,6 +8,8 @@ const UserSchema = new Schema({
   hotels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }], 
   phone: Number,
   userType: String,
+  longtitude: Number,
+  latitude: Number, 
 },{timestamps:true});
 const User = mongoose.model('User', UserSchema);
 export default User;
