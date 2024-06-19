@@ -38,6 +38,7 @@ const getUserDataForClientSide = async (req, res) => {
     res.status(500).json("Failed to get userData!");
   }
 };
+
 const Middleware = (req, res, next) => {
   try {
     if (req.cookies && req.cookies.userid) {
