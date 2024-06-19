@@ -1,9 +1,10 @@
 import "../styles/newHotelPage.scss";
 import iaxios from "../axiosSetUp";
-import { cookie } from "../cookie";
 import { ImageUploader } from "./imageUploader";
 import { useState } from "react";
+import { useAuthContext } from "../context/UserContext";
 function NewHotelPage() {
+  const {userDataFetch} = useAuthContext();
   const [imageId, setImageId] = useState(null);
   const onImage = (imgId) =>{
     setImageId(imgId);
@@ -24,7 +25,7 @@ function NewHotelPage() {
         longitude: inputs.longitude,
       },{
         headers:{
-          Authorization: `Bearer ${cookie.get('userid')}`,
+          Authorization: `Bearer ${userDataFetch._id}`,
         }
       });
       console.log(res.data);

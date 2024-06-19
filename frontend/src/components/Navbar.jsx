@@ -1,13 +1,9 @@
 import "../styles/navbar.scss";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
 import { Avartar } from "./avatarPage";
+import { useAuthContext } from "../context/UserContext";
 function Navbar() {
-  const userData = useContext(UserContext);
-  const tmp = userData.userData;  
-  const currentUser = tmp.data;
-  console.log(currentUser);
+  const {userDataFetch} = useAuthContext();
   return (
     <nav>
       <div className="left">
@@ -17,7 +13,7 @@ function Navbar() {
       </div>
       <div className="right">
         <div className="user">
-        <Avartar imageId={currentUser.imageId}></Avartar>
+        <Avartar imageId={userDataFetch.imageId}></Avartar>
         <Link to="/profile" className="profile">
             <span>Profile</span>
           </Link>

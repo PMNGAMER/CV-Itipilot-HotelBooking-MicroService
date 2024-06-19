@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import iaxios from "../axiosSetUp";
 import SinglePage from "./singlePage";
-import { cookie } from "../cookie";
+import { useAuthContext } from "../context/UserContext";
 import "../styles/listPage.scss"
 function ListPage() {
   const [postResponse, setPostResponse] = useState([]);
+  const {userDataFetch} = useAuthContext();
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -31,7 +32,7 @@ function ListPage() {
           },
           {
             headers: {
-              Authorization: `Bearer ${cookie.get("userid")}`,
+              Authorization: `Bearer ${userDataFetch._id}`,
             },
           }
         );

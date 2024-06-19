@@ -15,60 +15,22 @@ app.use(cors({
   credentials: true,
   origin: true,
 }));
-let data = null;
-let x= null;
-let y= null;
-const getUserData = async (req, res) => {
-  try {
-    data = req.body.data;
-    console.log(data);
-      res.status(200).json("ok" );
+const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg';
+async function verifyToken(req, res) {
+    try {
+        const token = req.cookies.usertoken;
+        jwt.verify(token, jwtSecret, {}, (err, userData) => {
+            req.user = userData; 
+        });
     } catch (err) {
-      console.log(err);
-      res.status(500).json("Failed to get userData!");
+        res.status(401).send(err.message); 
     }
-};
-const getUserDataForClientSide = async (req, res) => {
-  try {
-    console.log(data);
-    console.log("client");
-    res.status(200).json({ data });
-  } catch (err) {
-    console.error("Error awaiting data:", err);
-    res.status(500).json("Failed to get userData!");
-  }
-};
-
-const Middleware = (req, res, next) => {
-  try {
-    if (req.cookies && req.cookies.userid) {
-      req.userData = req.cookies.userid; 
-      next();
-    } else {
-      throw new Error('User ID cookie not found'); 
-    }
-  } catch (err) {
-    console.error("Error retrieving user data:", err);
-    res.status(500).json({ error: "Failed to get userData!" });
-  }
-};
-const coordinateForMap = (req, res) => {
-  x = req.body.x;
-  y = req.body.y;
-  res.status(200).json("ok");
 }
-const getCoordinate = (req,res) =>{
-  res.status(200).json({x,y});
-}
-app.post("/userData", getUserData);
-app.get("/userdataclient", getUserDataForClientSide);
-app.post("/coordinateformap", coordinateForMap);
-app.get("/coordinateclient", getCoordinate);
-app.get("/users/:id",Middleware, getUser);
-app.post("/hotels/search",Middleware, getHotels);
-app.get("/hotels/:id", getHotel);
-app.post("/hotels", Middleware, addHotel);
-app.delete("/hotels/:id", Middleware, deleteHotel);
+app.get("/users/:id",verifyToken, getUser);
+app.post("/hotels/search",verifyToken, getHotels);
+app.get("/hotels/:id", verifyToken, getHotel);
+app.post("/hotels", verifyToken, addHotel);
+app.delete("/hotels/:id", verifyToken, deleteHotel);
 app.use(express.static('uploads'));
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
