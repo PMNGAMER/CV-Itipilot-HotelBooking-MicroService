@@ -18,7 +18,7 @@ useEffect(() => {
     <div>
       {image ? (
         <div>
-          <img src={`http://localhost:4000/${image}`} alt={image} />
+          <img src={`http://localhost:4800/${image}`} alt={image} />
         </div>
       ) : (
         <p>Loading...</p>

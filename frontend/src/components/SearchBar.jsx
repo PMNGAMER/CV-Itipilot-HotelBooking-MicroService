@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/searchBar.scss";
 import { Link } from "react-router-dom";
-import iaxios from "../axiosSetUp";
-import { useEffect } from "react";
 function SearchBar() {
+  function getCookie(name) {
+    const cookieRegex = new RegExp(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+    const cookieMatch = document.cookie.match(cookieRegex);
+    return cookieMatch ? decodeURIComponent(cookieMatch[2]) : null;
+  }
   const [query, setQuery] = useState({
     city: "",
     minPrice: "",
@@ -14,20 +17,18 @@ function SearchBar() {
   });
   const [longtitude, setLongtitude] = useState(null);
   const [latitude, setLatitude] = useState(null);
+  
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await iaxios.get("http://localhost:4800/coordinateclient");
-        if (response.data.x !== null && response.data.y !== null) {
-          setLongtitude(response.data.x);
-          setLatitude(response.data.y);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchUserData();
+    const x = parseFloat(getCookie('x'));
+    const y = parseFloat(getCookie('y'));
+    if (x) {
+      setLongtitude(parseFloat(x));
+    }
+    if (y) {
+      setLatitude(parseFloat(y));
+    }
   }, []);
+
   if (longtitude === null || latitude === null) {
     return <div>Loading...</div>;
   }

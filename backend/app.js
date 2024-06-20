@@ -42,18 +42,6 @@ async function verifyToken(req, res, next) {
       res.status(401).send(err.message || 'Unauthorized');
   }
 }
-let x = null;
-let y = null;
-const coordinateForMap = (req, res) => {
-  x = req.body.x;
-  y = req.body.y;
-  res.status(200).json("ok");
-}
-const getCoordinate = (req,res) =>{
-  res.status(200).json({x,y});
-}
-app.post("/coordinateformap", coordinateForMap);
-app.get("/coordinateclient", getCoordinate);
 app.get("/users",verifyToken, getUser);
 app.post("/hotels/search",verifyToken, getHotels);
 app.get("/hotels/:id", verifyToken, getHotel);
