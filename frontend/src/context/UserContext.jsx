@@ -1,37 +1,51 @@
-import { createContext, useContext, useState, useEffect} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import iaxios from "../axiosSetUp";
+
 export const AuthContext = createContext();
+
 export const useAuthContext = () => {
-	return useContext(AuthContext);
+    return useContext(AuthContext);
 };
+
 function getCookie(name) {
-    const cookieRegex = new RegExp('(^|;\\s*)(' + name + ')=([^;]*)');
+    const cookieRegex = new RegExp(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
     const cookieMatch = document.cookie.match(cookieRegex);
-    if (cookieMatch) {
-        return decodeURIComponent(cookieMatch[3]);
-    } else {
-        return null;
-    }
+    return cookieMatch ? decodeURIComponent(cookieMatch[2]) : null;
 }
+
 export const AuthContextProvider = ({ children }) => {
-    const [userDataFetch, setUserData] = useState([]);
+    const [userDataFetch, setUserDataFetch] = useState(null); // Use null to distinguish between initial load and no data
+    const token = getCookie('usertoken');
+
     useEffect(() => {
         const getUserData = async () => {
-            setLoading(true);
             try {
-                const response = await iaxios.get(`http://localhost:4800/users`,{
-                  headers:{
-                    Authorization:`Bearer ${getCookie('usertoken')}`
-                  }
+                const response = await iaxios.get(`http://localhost:4800/users`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 });
-                setUserData(response.data);
+                setUserDataFetch(response.data);
             } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
+                console.log("Error fetching user data:", error);
+                // Handle error state, e.g., redirect to login page or display an error message
+                setUserDataFetch(null); // Reset state or handle appropriately
             }
         };
-      getUserData();
-    }, [getCookie('usertoken')]);
-    return <AuthContext.Provider value={{ userDataFetch }}>{children}</AuthContext.Provider>;
+
+        if (token) {
+            getUserData();
+        } else {
+            // Handle case when token is not present (e.g., redirect to login)
+            setUserDataFetch(null); // Reset state or handle appropriately
+        }
+    }, [token]); // Only run this effect when token changes
+
+    console.log(userDataFetch);
+
+    return (
+        <AuthContext.Provider value={{ userDataFetch }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };

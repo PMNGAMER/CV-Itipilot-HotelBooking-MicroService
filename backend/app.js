@@ -7,6 +7,7 @@ import {getHotel, getHotels, addHotel, deleteHotel} from "./controllers/hotel.co
 import { uploadImage, getImageById } from "./controllers/image.controller.js";
 import multer from "multer";
 import path from "path";
+import jwt from "jsonwebtoken";
 connectDB();
 const app = express();
 app.use(express.json());
@@ -15,8 +16,12 @@ app.use(cors({
   credentials: true,
   origin: true,
 }));
+const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg';
+
 async function verifyToken(req, res, next) {
   try {
+
+    console.log(req.cookies.usertoken);
       const token = req.cookies.usertoken;
       if (!token) {
           throw new Error('No token provided');
@@ -31,11 +36,14 @@ async function verifyToken(req, res, next) {
           });
       });
       req.user = userData;
+      console.log(req.user);
       next(); 
   } catch (err) {
       res.status(401).send(err.message || 'Unauthorized');
   }
 }
+let x = null;
+let y = null;
 const coordinateForMap = (req, res) => {
   x = req.body.x;
   y = req.body.y;
