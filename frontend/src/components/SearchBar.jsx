@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/searchBar.scss";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import iaxios from "../axiosSetUp";
 import { useEffect } from "react";
 function SearchBar() {
   const [query, setQuery] = useState({
@@ -17,7 +17,7 @@ function SearchBar() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:4800/coordinateclient");
+        const response = await iaxios.get("http://localhost:4800/coordinateclient");
         if (response.data.x !== null && response.data.y !== null) {
           setLongtitude(response.data.x);
           setLatitude(response.data.y);

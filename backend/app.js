@@ -15,18 +15,38 @@ app.use(cors({
   credentials: true,
   origin: true,
 }));
-const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg';
-async function verifyToken(req, res) {
-    try {
-        const token = req.cookies.usertoken;
-        jwt.verify(token, jwtSecret, {}, (err, userData) => {
-            req.user = userData; 
-        });
-    } catch (err) {
-        res.status(401).send(err.message); 
-    }
+async function verifyToken(req, res, next) {
+  try {
+      const token = req.cookies.usertoken;
+      if (!token) {
+          throw new Error('No token provided');
+      }
+      const userData = await new Promise((resolve, reject) => {
+          jwt.verify(token, jwtSecret, {}, (err, decoded) => {
+              if (err) {
+                  reject(err);
+              } else {
+                  resolve(decoded);
+              }
+          });
+      });
+      req.user = userData;
+      next(); 
+  } catch (err) {
+      res.status(401).send(err.message || 'Unauthorized');
+  }
 }
-app.get("/users/:id",verifyToken, getUser);
+const coordinateForMap = (req, res) => {
+  x = req.body.x;
+  y = req.body.y;
+  res.status(200).json("ok");
+}
+const getCoordinate = (req,res) =>{
+  res.status(200).json({x,y});
+}
+app.post("/coordinateformap", coordinateForMap);
+app.get("/coordinateclient", getCoordinate);
+app.get("/users",verifyToken, getUser);
 app.post("/hotels/search",verifyToken, getHotels);
 app.get("/hotels/:id", verifyToken, getHotel);
 app.post("/hotels", verifyToken, addHotel);

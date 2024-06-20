@@ -55,7 +55,7 @@ export const addHotel = async (req, res) => {
   const body = req.body;
   console.log(body);
   console.log("body ");
-  const tokenUserId = req.userData;
+  const tokenUserId = req.user;
   try {
     const newHotel = await Hotel.create({
       ...body,
@@ -72,7 +72,7 @@ export const addHotel = async (req, res) => {
 };
 export const deleteHotel = async (req, res) => {
   const hotelId = req.params.id;
-  const tokenUserId = req.userData;
+  const tokenUserId = req.user;
   try {
     const hotel = await Hotel.findById(hotelId);
     if (!hotel) {

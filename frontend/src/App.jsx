@@ -4,13 +4,11 @@ import ListPage from "./components/listPage";
 import { Layout } from "./components/layout";
 import NewHotelPage from "./components/newHotelPage";
 import ProfilePage from "./components/profilePage";
-import { UserContext } from "./context/UserContext";
+import { useAuthContext } from "./context/UserContext";
 function App() {
-  const userData = useContext(UserContext);
-  const tmp = userData?userData.userData:null;  
-  const currentUser = tmp?tmp.data:null;
-  if (currentUser === null) {
-    return null;
+  const {userDataFetch} = useAuthContext();
+  if (!userDataFetch){
+    return null
   }
   return (
     <BrowserRouter>
