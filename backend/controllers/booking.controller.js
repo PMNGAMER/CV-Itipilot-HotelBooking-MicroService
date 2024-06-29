@@ -1,6 +1,6 @@
 import Booking from '../models/booking.js';
 export const createBooking = async (req, res) => {
-  const { price, address, city, bedroom, bathroom, name, email } = req.body;
+  const { price, address, city, bedroom, bathroom, userId } = req.body;
   try {
     const newBooking = new Booking({
       price,
@@ -8,8 +8,7 @@ export const createBooking = async (req, res) => {
       city,
       bedroom,
       bathroom,
-      name,
-      email,
+      userId,
     });
     const savedBooking = await newBooking.save();
     res.status(201).json(savedBooking);
@@ -28,9 +27,9 @@ export const getAllBookings = async (req, res) => {
   }
 };
 export const getAllUserBookings = async (req, res) => {
-    const { email } = req.params;
+    const { userId } = req.params;
     try {
-      const bookings = await Booking.find({email:email});
+      const bookings = await Booking.find({userId:userId});
       res.status(200).json(bookings);
     } catch (error) {
       console.error('Error fetching bookings:', error);

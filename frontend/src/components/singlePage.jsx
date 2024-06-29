@@ -14,8 +14,7 @@ function SinglePage({ hotel }) {
         city: hotel.city,
         bedroom: hotel.bedroom,
         bathroom: hotel.bathroom,
-        name: userDataFetch.name,
-        email: userDataFetch.email,
+        userId: userDataFetch._id,
       });
       console.log("Booking successful:", response.data);
     } catch (error) {

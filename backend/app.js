@@ -48,7 +48,7 @@ app.post("/hotels/search",verifyToken, getHotels);
 app.get("/hotels/:id", verifyToken, getHotel);
 app.post("/hotels", verifyToken, addHotel);
 app.delete("/hotels/:id", verifyToken, deleteHotel);
-app.get("/bookings/:email", getAllUserBookings);
+app.get("/bookings/:userId", getAllUserBookings);
 app.post("/bookings", createBooking);
 app.delete("/bookings/:id", deleteBooking);
 app.get("/bookings", getAllBookings);

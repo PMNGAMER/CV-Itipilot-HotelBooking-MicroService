@@ -5,8 +5,7 @@ const bookingSchema = new mongoose.Schema({
   city: String,
   bedroom: Number,
   bathroom: Number,
-  name: String,
-  email: {type:String, unique:true},
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
 });
 const Booking = mongoose.model('Booking', bookingSchema);
 export default Booking;

@@ -26,8 +26,6 @@ function UserBooking({ booking }) {
           <span>{booking.bedroom + " beds"}</span>
           <img src="/bath.png" alt="" />
           <span>{booking.bathroom + " bathrooms"}</span>
-          <span>{booking.name}</span>
-          <span>{booking.email}</span>
           <button onClick={handleDelete} className="deleteButton">
             Delete
           </button>
