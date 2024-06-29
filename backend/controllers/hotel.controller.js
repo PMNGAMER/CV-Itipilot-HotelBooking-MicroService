@@ -6,23 +6,24 @@ export const getHotels = async (req, res) => {
   const query = req.body;
   try {
     const latitude = parseFloat(query.latitude);
-    const longitude = parseFloat(query.longitude);
+    const longtitude = parseFloat(query.longtitude);
     const radiusInKm = parseFloat(query.radiusInKm);
 
-    const deltaLongitude = Math.atan2(
+    const deltaLongtitude = Math.atan2(
       Math.sin(radiusInKm / EARTH_RADIUS_KM) * Math.cos(latitude * Math.PI / 180),
       Math.cos(radiusInKm / EARTH_RADIUS_KM) - Math.sin(latitude * Math.PI / 180) * Math.sin(latitude * Math.PI / 180)
     );
-    const minLongitude = longitude - deltaLongitude * (180 / Math.PI);
-    const maxLongitude = longitude + deltaLongitude * (180 / Math.PI);
+    const minLongtitude = longtitude - deltaLongtitude * (180 / Math.PI);
+    const maxLongtitude = longtitude + deltaLongtitude * (180 / Math.PI);
+    console.log(minLongtitude, " ", maxLongtitude, " long");
+
     const deltaLatitude = (radiusInKm / EARTH_RADIUS_KM) * (180 / Math.PI);
     const minLatitude = latitude - deltaLatitude;
     const maxLatitude = latitude + deltaLatitude;
-
-    // Construct the filter object
+    console.log(minLatitude, " ", maxLatitude, " lat");
     const filter = {
       latitude: { $gte: minLatitude, $lte: maxLatitude },
-      longitude: { $gte: minLongitude, $lte: maxLongitude },
+      longtitude: { $gte: minLongtitude, $lte: maxLongtitude },
     };
 
     // Add optional fields to the filter

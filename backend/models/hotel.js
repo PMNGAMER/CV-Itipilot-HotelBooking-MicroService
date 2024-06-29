@@ -7,7 +7,7 @@ const hotelSchema = new mongoose.Schema({
   bedroom: Number,
   bathroom: Number,
   latitude: String,
-  longitude: String,
+  longtitude: String,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
 });
 const Hotel = mongoose.model('Hotel', hotelSchema);

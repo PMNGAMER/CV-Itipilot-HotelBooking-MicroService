@@ -5,6 +5,7 @@ import { connectDB } from "./db/db.js";
 import {getUser} from "./controllers/user.controller.js";
 import {getHotel, getHotels, addHotel, deleteHotel} from "./controllers/hotel.controller.js";
 import { uploadImage, getImageById } from "./controllers/image.controller.js";
+import { createBooking, deleteBooking, getAllBookings, getAllUserBookings } from "./controllers/booking.controller.js";
 import multer from "multer";
 import path from "path";
 import jwt from "jsonwebtoken";
@@ -41,11 +42,16 @@ async function verifyToken(req, res, next) {
       res.status(401).send(err.message || 'Unauthorized');
   }
 }
+
 app.get("/users",verifyToken, getUser);
 app.post("/hotels/search",verifyToken, getHotels);
 app.get("/hotels/:id", verifyToken, getHotel);
 app.post("/hotels", verifyToken, addHotel);
 app.delete("/hotels/:id", verifyToken, deleteHotel);
+app.get("/bookings/:email", getAllUserBookings);
+app.post("/bookings", createBooking);
+app.delete("/bookings/:id", deleteBooking);
+app.get("/bookings", getAllBookings);
 app.use(express.static('uploads'));
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

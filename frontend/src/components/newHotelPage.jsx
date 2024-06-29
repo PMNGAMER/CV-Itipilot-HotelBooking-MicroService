@@ -47,7 +47,7 @@ function NewHotelPage() {
         bedroom: parseInt(inputs.bedroom),
         bathroom: parseInt(inputs.bathroom),
         latitude: latitude,
-        longitude: longtitude,
+        longtitude: longtitude,
       },{
         headers:{
           Authorization: `Bearer ${userDataFetch._id}`,

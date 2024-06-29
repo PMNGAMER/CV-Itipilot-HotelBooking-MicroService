@@ -55,7 +55,7 @@ function ListPage() {
       {postResponse && postResponse.length > 0 ? (
         <div className="listContainer">
           {postResponse.map((res) => (
-            <SinglePage key={res._id} id={res._id} />
+            <SinglePage key={res._id} hotel={res} />
           ))}
         </div>
       ) : (
