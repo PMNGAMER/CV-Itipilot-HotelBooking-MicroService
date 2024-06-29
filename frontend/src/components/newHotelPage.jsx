@@ -1,11 +1,36 @@
 import "../styles/newHotelPage.scss";
 import iaxios from "../axiosSetUp";
 import { ImageUploader } from "./imageUploader";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useAuthContext } from "../context/UserContext";
 function NewHotelPage() {
+
+  function getCookie(name) {
+    const cookieRegex = new RegExp(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+    const cookieMatch = document.cookie.match(cookieRegex);
+    return cookieMatch ? decodeURIComponent(cookieMatch[2]) : null;
+  }
+
   const {userDataFetch} = useAuthContext();
   const [imageId, setImageId] = useState(null);
+  const [longtitude, setLongtitude] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  
+  useEffect(() => {
+    const x = parseFloat(getCookie('x'));
+    const y = parseFloat(getCookie('y'));
+    if (x) {
+      setLongtitude(parseFloat(x));
+    }
+    if (y) {
+      setLatitude(parseFloat(y));
+    }
+  }, []);
+
+  if (longtitude === null || latitude === null) {
+    return <div>Loading...</div>;
+  }
+  console.log(longtitude," , ", latitude);
   const onImage = (imgId) =>{
     setImageId(imgId);
   }
@@ -21,8 +46,8 @@ function NewHotelPage() {
         city: inputs.city,
         bedroom: parseInt(inputs.bedroom),
         bathroom: parseInt(inputs.bathroom),
-        latitude: inputs.latitude,
-        longitude: inputs.longitude,
+        latitude: latitude,
+        longitude: longtitude,
       },{
         headers:{
           Authorization: `Bearer ${userDataFetch._id}`,
@@ -36,7 +61,7 @@ function NewHotelPage() {
   return (
     <div className="newPostPage">
       <div className="formContainer">
-        <h1>Add New Post</h1>
+        <h1>Add New Hotel</h1>
         <div className="wrapper">
           <ImageUploader onImageUpload={onImage}></ImageUploader>
           <form onSubmit={handleSubmit}>
@@ -59,14 +84,6 @@ function NewHotelPage() {
             <div className="item">
               <label htmlFor="bathroom">Bathroom Number</label>
               <input min={1} id="bathroom" name="bathroom" type="number" />
-            </div>
-            <div className="item">
-              <label htmlFor="latitude">Latitude</label>
-              <input id="latitude" name="latitude" type="text" />
-            </div>
-            <div className="item">
-              <label htmlFor="longitude">Longitude</label>
-              <input id="longitude" name="longitude" type="text" />
             </div>
             <button className="sendButton">Add</button>
           </form>

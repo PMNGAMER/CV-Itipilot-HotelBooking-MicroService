@@ -17,7 +17,6 @@ app.use(cors({
   origin: true,
 }));
 const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg';
-
 async function verifyToken(req, res, next) {
   try {
 

@@ -18,6 +18,13 @@ function ListPage() {
         const latitude = params.get("latitude");
         const longtitude = params.get("longtitude");
         const radiusInKm = params.get("radiusInKm");
+        console.log(city);
+        console.log(minPrice);
+        console.log(maxPrice);
+        console.log(bedroom);
+        console.log(latitude);
+        console.log(longtitude);
+        console.log(radiusInKm);
         const response = await iaxios.post(
           `http://localhost:4800/hotels/search`,
           {
@@ -45,11 +52,16 @@ function ListPage() {
   }, [window.location.search]);
   return (
     <div className="listPage">
-      <div className="listContainer">
-        {postResponse.map((res) => (
-          <SinglePage key={res._id} id={res._id} />
-        ))}
-      </div>
+      {postResponse && postResponse.length > 0 ? (
+        <div className="listContainer">
+          {postResponse.map((res) => (
+            <SinglePage key={res._id} id={res._id} />
+          ))}
+        </div>
+      ) : (
+        <div style={{fontSize:'20px'
+        }}>No results found</div>
+      )}
     </div>
   );
 }

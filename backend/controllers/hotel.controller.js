@@ -1,32 +1,53 @@
 import Hotel from "../models/hotel.js";
 import User from "../models/user.js";
 const EARTH_RADIUS_KM = 6371;
+
 export const getHotels = async (req, res) => {
   const query = req.body;
-  console.log(query);
   try {
     const latitude = parseFloat(query.latitude);
-    const longtitude = parseFloat(query.longtitude);
+    const longitude = parseFloat(query.longitude);
     const radiusInKm = parseFloat(query.radiusInKm);
-    const deltaLongtitude = Math.atan2(
+
+    const deltaLongitude = Math.atan2(
       Math.sin(radiusInKm / EARTH_RADIUS_KM) * Math.cos(latitude * Math.PI / 180),
       Math.cos(radiusInKm / EARTH_RADIUS_KM) - Math.sin(latitude * Math.PI / 180) * Math.sin(latitude * Math.PI / 180)
     );
-    const minLongtitude = longtitude - deltaLongtitude * (180 / Math.PI);
-    const maxLongtitude = longtitude + deltaLongtitude * (180 / Math.PI);
+    const minLongitude = longitude - deltaLongitude * (180 / Math.PI);
+    const maxLongitude = longitude + deltaLongitude * (180 / Math.PI);
     const deltaLatitude = (radiusInKm / EARTH_RADIUS_KM) * (180 / Math.PI);
     const minLatitude = latitude - deltaLatitude;
     const maxLatitude = latitude + deltaLatitude;
+
+    // Construct the filter object
     const filter = {
       latitude: { $gte: minLatitude, $lte: maxLatitude },
-      longtitude: { $gte: minLongtitude, $lte: maxLongtitude },
-      city: query.city || { $exists: true },
-      bedroom: parseInt(query.bedroom) || { $exists: true },
-      price: {
-        $gte: parseInt(query.minPrice) || { $exists: true },
-        $lte: parseInt(query.maxPrice) || { $exists: true }
-      }
+      longitude: { $gte: minLongitude, $lte: maxLongitude },
     };
+
+    // Add optional fields to the filter
+    if (query.city && query.city !== "") {
+      filter.city = query.city; // Add city directly if it exists and is not an empty string
+    } else {
+      filter.city = { $exists: true }; // Ensure city field exists in the documents
+    }
+
+    if (query.bedroom) {
+      filter.bedroom = parseInt(query.bedroom); // Parse and add bedroom count if provided
+    }
+
+    // Handle price range query
+    if (query.minPrice || query.maxPrice) {
+      filter.price = {};
+      if (query.minPrice) {
+        filter.price.$gte = parseInt(query.minPrice); // Parse and add minimum price
+      }
+      if (query.maxPrice) {
+        filter.price.$lte = parseInt(query.maxPrice); // Parse and add maximum price
+      }
+    }
+
+    // Fetch hotels using the constructed filter
     const hotels = await Hotel.find(filter);
     res.status(200).json(hotels);
   } catch (err) {
