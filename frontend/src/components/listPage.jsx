@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import iaxios from "../axiosSetUp";
 import SinglePage from "./singlePage";
 import { useAuthContext } from "../context/UserContext";
-import "../styles/listPage.scss"
 function ListPage() {
   const [postResponse, setPostResponse] = useState([]);
   const {userDataFetch} = useAuthContext();
@@ -50,17 +49,28 @@ function ListPage() {
     };
     fetchPosts();
   }, [window.location.search]);
+  console.log(postResponse);
   return (
-    <div className="listPage">
+    <div className="bg-black">
       {postResponse && postResponse.length > 0 ? (
-        <div className="listContainer">
-          {postResponse.map((res) => (
-            <SinglePage key={res._id} hotel={res} />
-          ))}
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {postResponse.map((res) => (
+              <SinglePage key={res._id} hotel={res} />
+            ))}
+          </div>
         </div>
       ) : (
-        <div style={{fontSize:'20px'
-        }}>No results found</div>
+        <div className="flex items-center justify-center h-screen">
+          <div className="bg-white p-8 rounded-lg shadow-md text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              No results found
+            </h2>
+            <p className="text-gray-600">
+              Sorry, there are no results that match your search.
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );

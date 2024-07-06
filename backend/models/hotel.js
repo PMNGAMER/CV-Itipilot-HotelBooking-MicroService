@@ -6,8 +6,9 @@ const hotelSchema = new mongoose.Schema({
   city: String,
   bedroom: Number,
   bathroom: Number,
-  latitude: String,
-  longtitude: String,
+  country: String, 
+  latitude: Number,
+  longtitude: Number,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
 });
 const Hotel = mongoose.model('Hotel', hotelSchema);

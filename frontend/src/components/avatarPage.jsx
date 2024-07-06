@@ -13,15 +13,18 @@ export const Avartar = ({imageId}) => {
 useEffect(() => {
     fetchImage();
 }, []);
-  return (
-    <div>
-      {image ? (
-        <div>
-          <img src={`http://localhost:4000/${image}`} alt={image} style={{width:'50px', height:'50px', borderRadius:'50%'}}/>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
-  );
+return (
+  <div className="flex justify-center items-center">
+    {image ? (
+      <div className="rounded-full overflow-hidden">
+        <img
+          src={`http://localhost:4800/${image}`}
+          alt={image}
+          className="w-12 h-12 object-cover"
+        />
+      </div>
+    ) : (
+      <p className="text-gray-500">Loading...</p>
+    )}
+  </div>)
 };

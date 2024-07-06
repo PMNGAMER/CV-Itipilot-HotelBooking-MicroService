@@ -1,40 +1,54 @@
 import Hotel from "../models/hotel.js";
 import User from "../models/user.js";
-const EARTH_RADIUS_KM = 6371;
 
 export const getHotels = async (req, res) => {
   const query = req.body;
+
   try {
-    const latitude = parseFloat(query.latitude);
-    const longtitude = parseFloat(query.longtitude);
+    const latitude = query.latitude;
+    const longtitude = query.longtitude;
     const radiusInKm = parseFloat(query.radiusInKm);
+    console.log(latitude," ", longtitude);
+    // Earth's radius in kilometers
+    const EARTH_RADIUS_KM = 6371;
 
-    const deltaLongtitude = Math.atan2(
-      Math.sin(radiusInKm / EARTH_RADIUS_KM) * Math.cos(latitude * Math.PI / 180),
-      Math.cos(radiusInKm / EARTH_RADIUS_KM) - Math.sin(latitude * Math.PI / 180) * Math.sin(latitude * Math.PI / 180)
-    );
-    const minLongtitude = longtitude - deltaLongtitude * (180 / Math.PI);
-    const maxLongtitude = longtitude + deltaLongtitude * (180 / Math.PI);
-    console.log(minLongtitude, " ", maxLongtitude, " long");
+    // Convert radius from kilometers to radians
+    const radiusInRadians = radiusInKm / EARTH_RADIUS_KM;
 
-    const deltaLatitude = (radiusInKm / EARTH_RADIUS_KM) * (180 / Math.PI);
-    const minLatitude = latitude - deltaLatitude;
-    const maxLatitude = latitude + deltaLatitude;
-    console.log(minLatitude, " ", maxLatitude, " lat");
+    // Calculate latitude bounds
+    const minLatitude = latitude - (radiusInRadians * (180 / Math.PI));
+    const maxLatitude = latitude + (radiusInRadians * (180 / Math.PI));
+
+    // Calculate longtitude bounds
+    const deltaLongtitude = Math.asin(Math.sin(radiusInRadians) / Math.cos(latitude * (Math.PI / 180)));
+    console.log(deltaLongtitude);
+    const minLongtitude = longtitude - (deltaLongtitude * (180 / Math.PI));
+    const maxLongtitude = longtitude + (deltaLongtitude * (180 / Math.PI));
+    console.log(minLatitude," ",maxLatitude);
+    console.log(minLongtitude," ",maxLongtitude);
     const filter = {
       latitude: { $gte: minLatitude, $lte: maxLatitude },
       longtitude: { $gte: minLongtitude, $lte: maxLongtitude },
     };
 
     // Add optional fields to the filter
-    if (query.city && query.city !== "") {
-      filter.city = query.city; // Add city directly if it exists and is not an empty string
+    if (query.city && query.city.trim() !== "") {
+      filter.city = { $regex: query.city.trim(), $options: "i" }; // Case-insensitive regex for partial matching
     } else {
       filter.city = { $exists: true }; // Ensure city field exists in the documents
     }
 
+    // Handle minimum bedroom and bathroom criteria
     if (query.bedroom) {
-      filter.bedroom = parseInt(query.bedroom); // Parse and add bedroom count if provided
+      filter.bedroom = { $gte: parseInt(query.bedroom) }; // Ensure at least 'query.bedroom' bedrooms
+    } else {
+      filter.bedroom = { $exists: true }; // Ensure bedroom field exists in the documents
+    }
+
+    if (query.bathroom) {
+      filter.bathroom = { $gte: parseInt(query.bathroom) }; // Ensure at least 'query.bathroom' bathrooms
+    } else {
+      filter.bathroom = { $exists: true }; // Ensure bathroom field exists in the documents
     }
 
     // Handle price range query
@@ -49,13 +63,24 @@ export const getHotels = async (req, res) => {
     }
 
     // Fetch hotels using the constructed filter
-    const hotels = await Hotel.find(filter);
+    const hotels = await Hotel.find(filter).populate('userId');
     res.status(200).json(hotels);
   } catch (err) {
     console.error("Failed to get Hotels:", err);
     res.status(500).json({ message: "Failed to get Hotels" });
   }
 };
+export const getAllUserHotels = async (req, res) => {
+  // const { userId } = req.params;
+  try {
+    const hotels = await Hotel.find({userId: (await User.findOne())._id });
+    res.status(200).json(hotels);
+  } catch (error) {
+    console.error('Error fetching Hotels:', error);
+    res.status(500).json({ message: 'Failed to fetch Hotels' });
+  }
+};  
+
 export const getHotel = async (req, res) => {
   const id = req.params.id;
   try {
@@ -77,15 +102,12 @@ export const addHotel = async (req, res) => {
   const body = req.body;
   console.log(body);
   console.log("body ");
-  const tokenUserId = req.user.userId;
+  // const tokenUserId = req.user.userId;
   try {
     const newHotel = await Hotel.create({
       ...body,
-      userId: tokenUserId,
+      userId: (await User.findOne())._id,
     });
-    const currentUser = await User.findById(tokenUserId);
-    currentUser.hotels.push(newHotel._id);
-    await currentUser.save();
     res.status(200).json(newHotel);
   } catch (err) {
     console.error('Failed to create Hotel:', err);
@@ -94,22 +116,16 @@ export const addHotel = async (req, res) => {
 };
 export const deleteHotel = async (req, res) => {
   const hotelId = req.params.id;
-  const tokenUserId = req.user.userId;
+  // const tokenUserId = req.user.userId;
   try {
     const hotel = await Hotel.findById(hotelId);
     if (!hotel) {
       return res.status(404).json({ message: "Hotel not found" });
     }
-    if (hotel.userId.toString() !== tokenUserId) {
+    if (hotel.userId.toString() !== (await User.findOne())._id) {
       return res.status(403).json({ message: "Not Authorized!" });
     }
     await Hotel.findByIdAndDelete(hotelId);
-    const currentUser = await User.findById(tokenUserId);
-    if (!currentUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    currentUser.hotels = currentUser.hotels.filter(id => id.toString() !== hotelId);
-    await currentUser.save();
     res.status(200).json({ message: "Hotel deleted" });
   } catch (err) {
     console.error('Failed to delete Hotel:', err);

@@ -6,6 +6,7 @@ const bookingSchema = new mongoose.Schema({
   bedroom: Number,
   bathroom: Number,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
+  createdAt: { type: Date, default: Date.now },
 });
 const Booking = mongoose.model('Booking', bookingSchema);
 export default Booking;
