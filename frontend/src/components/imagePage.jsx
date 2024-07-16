@@ -15,13 +15,13 @@ useEffect(() => {
     fetchImage();
 }, []);
 return (
-  <div className="flex justify-center items-center h-screen">
+  <div className="flex justify-center items-center h-96">
     {image ? (
       <div className=" overflow-hidden shadow-lg">
         <img
           src={`http://localhost:4800/${image}`}
           alt={image}
-          className="w-full h-full object-cover"
+          className="w-96 h-96 object-cover mt-3 rounded-xl"
         />
       </div>
     ) : (

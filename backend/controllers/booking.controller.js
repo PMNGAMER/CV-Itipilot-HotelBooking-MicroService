@@ -19,7 +19,6 @@ export const createBooking = async (req, res) => {
   }
 };
 export const getAllUserBookings = async (req, res) => {
-    // const { userId } = req.params;
     try {
       const bookings = await Booking.find({userId: (await User.findOne())._id });
       res.status(200).json(bookings);

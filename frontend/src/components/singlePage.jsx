@@ -34,7 +34,7 @@ function SinglePage({ hotel }) {
           },
         }}/>
       {hotel && hotel.imageId ? (
-        <SingleImage imageId={hotel.imageId} className="h-64 w-full object-cover" />
+        <SingleImage imageId={hotel.imageId} className="h-full w-full object-cover" />
       ) : null}
       <div className="p-6 sm:p-8">
         <div className="flex items-center justify-between">
