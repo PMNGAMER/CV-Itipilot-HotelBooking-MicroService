@@ -1,35 +1,10 @@
 import iaxios from "../axiosSetUp";
 import { ImageUploader } from "./imageUploader";
 import { useState,useEffect } from "react";
-// import { useAuthContext } from "../context/UserContext";
 function NewHotelPage() {
 
-  // function getCookie(name) {
-  //   const cookieRegex = new RegExp(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
-  //   const cookieMatch = document.cookie.match(cookieRegex);
-  //   return cookieMatch ? decodeURIComponent(cookieMatch[2]) : null;
-  // }
-
-  // const {userDataFetch} = useAuthContext();
   const [imageId, setImageId] = useState(null);
-  // const [longtitude, setLongtitude] = useState(null);
-  // const [latitude, setLatitude] = useState(null);
   
-  // useEffect(() => {
-  //   const x = parseFloat(getCookie('x'));
-  //   const y = parseFloat(getCookie('y'));
-  //   if (x) {
-  //     setLongtitude(parseFloat(x));
-  //   }
-  //   if (y) {
-  //     setLatitude(parseFloat(y));
-  //   }
-  // }, []);
-
-  if (longtitude === null || latitude === null) {
-    return <div>Loading...</div>;
-  }
-  console.log(longtitude," , ", latitude);
   const onImage = (imgId) =>{
     setImageId(imgId);
   }
@@ -52,11 +27,6 @@ function NewHotelPage() {
         latitude: getRandomInt(1,100),
         longtitude: getRandomInt(1,100),
       },
-      // {
-      //   headers:{
-      //     Authorization: `Bearer ${userDataFetch._id}`,
-      //   }
-      // }
     );
       console.log(res.data);
     } catch (err) {

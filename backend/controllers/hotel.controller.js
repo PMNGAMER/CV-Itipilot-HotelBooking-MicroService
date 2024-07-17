@@ -73,7 +73,7 @@ export const getHotels = async (req, res) => {
 export const getAllUserHotels = async (req, res) => {
   // const { userId } = req.params;
   try {
-    const hotels = await Hotel.find({userId: (await User.findOne())._id });
+    const hotels = await Hotel.find({userId: (await User.findOne())._id }).populate('userId');
     res.status(200).json(hotels);
   } catch (error) {
     console.error('Error fetching Hotels:', error);

@@ -21,7 +21,7 @@ return (
         <img
           src={`http://localhost:4800/${image}`}
           alt={image}
-          className="w-96 h-96 object-cover mt-3 rounded-xl"
+          className="flex justify-center items-center px-3 py-3 h-96 object-cover  rounded-3xl"
         />
       </div>
     ) : (

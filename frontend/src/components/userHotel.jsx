@@ -20,7 +20,7 @@ function UserHotel({ hotel }) {
           <div className="flex items-center space-x-2">
             <img src="/user.png" alt="" className="h-6 w-6" />
             <span className="text-gray-700">
-              {hotel && hotel.userId ? hotel.userId.name : "Loading..."}
+              {hotel.userId.name}
             </span>
           </div>
           <div className="flex items-center space-x-2">
